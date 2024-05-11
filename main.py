@@ -33,8 +33,24 @@ if __name__ == '__main__':
                     gmanager.player_choose()
             gmanager.blit_choose_player(screen)
             pygame.display.flip()
-
         print(gmanager.players)
 
+        gmanager.add_mode_choosing_btns()
+        while gmanager.state == GameState.CHOOSING_MODE:
+            screen.fill(config.COLORS["WARM_YELLOW"])
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quitend()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    gmanager.mode_choose()
+            gmanager.blit_choose_mode(screen)
+            pygame.display.flip()
+        print(gmanager.current_level)
+
+        while gmanager.state == GameState.PLAYING:
+            screen.fill(gmanager.get_curr_lvl().supp_clr)
+
+            if gmanager.current_level >= config.NUM_LEVELS:
+                gmanager.state = GameState.FINAL_STATE
 
 quitend()

@@ -18,3 +18,5 @@ class SelectButton(pygame.sprite.Sprite):
     def is_clicked(self) -> bool:
         print(self.rect, pygame.mouse.get_pos())
         return pygame.mouse.get_pressed()[0] and self.inrect(*pygame.mouse.get_pos())
+
+
