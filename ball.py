@@ -6,11 +6,11 @@ class Ball(pygame.sprite.Sprite):
 
     def __init__(self, player_num):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface([BALL_SIZE, BALL_SIZE])
+        self.image = pygame.Surface([BALL_SIZE, BALL_SIZE], pygame.SRCALPHA)
         self.rect = pygame.draw.circle(self.image, BALL_COLORS[player_num], (BALL_RAD, BALL_RAD), BALL_RAD)
         self.set_default()
 
-    def set_default(self, pos = (0, 0), visible = False):
+    def set_default(self, pos = (0, 0), visible = True):
         self.visible = visible
         self.rect.center = pos
         self.vel = Vector2(0, 0)

@@ -24,6 +24,12 @@ COLORS = {
     "BLUE" : (0, 0, 255),
     "CYAN" : (0, 200, 200),
     "WARM_YELLOW" : "#F4E98C",
+
+    "WALL_GREY" : (120, 120, 120),
+    "WALL_BLUE" : (100, 100, 140),
+    "GRASS_GREEN" : (100, 200, 100),
+    "SAND_YELLOW" : (250,234,128),
+    "ICE_BLUE" : (153,238,255),
 }
 
 BALL_SIZE = 16

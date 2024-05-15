@@ -3,6 +3,7 @@ import config
 from levels import levels, Level
 from enum import Enum
 from game_objects import SelectButton
+from ball import Ball
 
 class GameState(Enum):
     INITIAL_STATE = 0
@@ -24,6 +25,8 @@ class GameManager:
         self.current_level = 0
         self.sprites = pygame.sprite.Group()
         self.btns = pygame.sprite.Group()
+        self.balls = []
+        self.active_players = []
 
     def get_curr_lvl(self) -> Level:
         return levels[self.current_level]
@@ -66,6 +69,29 @@ class GameManager:
                 self.sprites.empty()
                 self.btns.empty()
                 return
+
+    def preplay_util(self):
+        self.balls = [Ball(x) for x in range(self.players)]
+        for ball in self.balls:
+            ball.add(self.sprites)
+        self.update_active_players()
+        self.set_ball_positions()
+
+    def update_active_players(self):
+        self.active_players = [ i for i in range(self.players)]
+
+    def next_level(self):
+        self.current_level += 1
+        print(self.current_level)
+        if self.current_level >= config.NUM_LEVELS:
+            self.state = GameState.FINAL_STATE
+            return
+        self.set_ball_positions()
+
+    def set_ball_positions(self):
+        for idx, ball in enumerate(self.balls):
+            ball.rect.center = levels[self.current_level].initial_pos[idx]
+            ball.visible = True
  
     def blit_init(self, screen):
         start_text = config.primary_font.render("Minigolf Game", False, config.COLORS["WHITE"])
@@ -77,3 +103,11 @@ class GameManager:
 
     def blit_choose_mode(self, screen):
         self.sprites.draw(screen)
+
+    def blit_current_level(self, screen):
+        lvl = levels[self.current_level]
+        lvl.group.draw(screen)
+        self.sprites.draw(screen)
+
+    def display_scores(self, screen):
+        raise NotImplementedError()
