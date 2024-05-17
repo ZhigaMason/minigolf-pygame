@@ -27,7 +27,7 @@ class Ice(AbstractFloor):
 
     @property
     def friction(self):
-        return 1.0
+        return 0.99
 
 class Sand(AbstractFloor):
     def __init__(self, grid_pos):
@@ -35,4 +35,4 @@ class Sand(AbstractFloor):
 
     @property
     def friction(self):
-        return 0.7
+        return 0.9

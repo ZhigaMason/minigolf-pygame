@@ -1,6 +1,8 @@
 import pygame
 pygame.font.init()
 
+FPS = 60
+
 SCREEN_SIZE = (1280, 960)
 CELL_SIZE = 32
 GRID_SIZE  = SCREEN_SIZE[0] // CELL_SIZE, SCREEN_SIZE[1] // CELL_SIZE 
@@ -44,3 +46,7 @@ BALL_COLORS = [
     (200, 200, 255), 
     (200, 255, 200), 
 ]
+
+ARROW_BOX_SIZE = 240, 240
+ARROW_MAX_LENGTH = 100
+ARROW_BALL_GAP = 20

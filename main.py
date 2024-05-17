@@ -4,7 +4,7 @@ from game_manager import GameManager, GameState
 
 pygame.init()
 screen = pygame.display.set_mode(config.SCREEN_SIZE)
-clocck = pygame.time.Clock()
+clock = pygame.time.Clock()
 gmanager = GameManager()
 def quitend():
     pygame.display.quit()
@@ -47,14 +47,20 @@ if __name__ == '__main__':
             pygame.display.flip()
         print(gmanager.current_level)
 
+        draw_arrow = False
         gmanager.preplay_util()
         while gmanager.state == GameState.PLAYING:
-            gmanager.blit_current_level(screen)
+            dt = clock.tick(config.FPS) / 100
+            gmanager.blit_current_level(screen, tick=dt)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quitend()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    gmanager.next_level()
+                if event.type == pygame.MOUSEBUTTONDOWN and gmanager.pos_in_current_ball(pygame.mouse.get_pos()):
+                    gmanager.draw_arrow()
+                    draw_arrow = True
+                if event.type == pygame.MOUSEBUTTONUP and draw_arrow:
+                    gmanager.leave_arrow()
+                    draw_arrow = False
             pygame.display.flip()
             
 

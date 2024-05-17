@@ -68,9 +68,12 @@ class Level:
 
 levels = [Level() for _ in range(NUM_LEVELS)]
 
-levels[0].set_hole((10, 10))
-levels[0].set_initial_pos((5,5), (6,5), (7,5), (8,5))
-
+levels[0].set_hole((15, 15))
+levels[0].set_initial_pos((10,10), (6,10), (7,10), (8,10))
+levels[0].set_cells_by_type(Wall, [ (i, 3) for i in range(1, GRID_SIZE[0] - 1)])
+levels[0].set_cells_by_type(Ice, [ (i, 4) for i in range(1, GRID_SIZE[0] - 1)])
+levels[0].set_cells_by_type(Sand, [ (10, i) for i in range(5, GRID_SIZE[1] - 1)])
+levels[0].set_cells_by_type(Ice, [ (i, 10) for i in range(1, GRID_SIZE[0] - 1)])
 levels[1].set_hole((26, 6))
 levels[1].set_cells_by_coord({
     (1,1) : Wall,
