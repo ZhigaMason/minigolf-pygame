@@ -134,7 +134,8 @@ class GameManager:
             ball.update()
 
     def draw_arrow(self):
-        self.arrow = Arrow(self.balls[self.current_player].rect.center)
+        ball = self.current_plr
+        self.arrow = Arrow(ball.rect.center, ball.clr)
         self.arrow.add(self.sprites)
 
     def leave_arrow(self):

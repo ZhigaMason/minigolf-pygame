@@ -4,12 +4,13 @@ from pymunk.vec2d import Vec2d as v2
 
 class Arrow(pygame.sprite.Sprite):
 
-    def __init__(self, pos):
+    def __init__(self, pos, color):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface(cfg.ARROW_BOX_SIZE, pygame.SRCALPHA)
         self.rect = self.image.get_rect()
         self.rect.center = pos
         self.force = v2(0,0)
+        self.clr = color
 
     def update(self, *args, **kwargs):
         self.image.fill((0,0,0,0))
@@ -23,6 +24,12 @@ class Arrow(pygame.sprite.Sprite):
             return
         self.force = dir
         tail = cfg.ARROW_BALL_GAP*(dir.scale_to_length(1)) + s
-        head = dir + s
-        pygame.draw.line(self.image, cfg.COLORS["WHITE"], tail, head, width=4)
+        head = dir + tail
+        self.draw_arrow(tail, head, dir)
 
+    def draw_arrow(self, tail, head, dir):
+        h = 0.1*dir.perpendicular()
+        p0 = head + h
+        p1 = head - h
+        pygame.draw.polygon(self.image, self.clr, (tail, p0, p1))
+        pygame.draw.circle(self.image, self.clr, head, h.length)
