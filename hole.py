@@ -1,6 +1,5 @@
 import pygame
 import config as cfg
-from ball import Ball
 from math import dist
 
 class Hole(pygame.sprite.Sprite):
@@ -13,5 +12,5 @@ class Hole(pygame.sprite.Sprite):
         pos = cfg.make_screen_pos(grid_pos)
         self.rect.center = (pos[0] + cfg.CELL_SIZE // 2, pos[1] + cfg.CELL_SIZE // 2)
 
-    def is_inside(self, ball : Ball):
+    def is_inside(self, ball):
         return dist(ball.rect.center, self.rect.center) <= cfg.BALL_RAD

@@ -1,3 +1,4 @@
+import pymunk
 import pygame
 import config as cfg
 from levels import levels, Level
@@ -5,6 +6,7 @@ from enum import Enum
 from game_objects import SelectButton
 from ball import Ball
 from arrow import Arrow
+from pymunk.pygame_util import DrawOptions
 
 class GameState(Enum):
     INITIAL_STATE = 0
@@ -117,17 +119,19 @@ class GameManager:
             self.state = GameState.FINAL_STATE
             return
         self.update_active_players()
+        self.clean_level()
         self.set_ball_positions()
+
+    def clean_level(self):
+        for ball in self.balls:
+            ball.remove_from_level(self.current_lvl.space)
 
     def set_ball_positions(self):
         for idx, ball in enumerate(self.balls):
-            ball.rect.center = levels[self.current_level].initial_pos[idx]
+            ball.body.position = self.current_lvl.initial_pos[idx]
             ball.visible = True
-
-    def set_ball_friction(self):
-        for ball in self.balls:
-            x, y = cfg.make_grid_pos(ball.rect.center)
-            ball.friction = self.current_lvl.grid[x][y].friction
+            ball.add_to_level(self.current_lvl)
+            ball.update()
 
     def draw_arrow(self):
         self.arrow = Arrow(self.balls[self.current_player].rect.center)
@@ -135,7 +139,8 @@ class GameManager:
 
     def leave_arrow(self):
         self.arrow.kill()
-        self.balls[self.current_player].apply_force(self.arrow.force / 2)
+        force = self.arrow.force
+        self.balls[self.current_player].apply_force(force)
         self.current_player = next(self.plr_queue)
  
     def blit_init(self, screen):
@@ -149,12 +154,20 @@ class GameManager:
     def blit_choose_mode(self, screen):
         self.sprites.draw(screen)
 
-    def blit_current_level(self, screen, tick):
+    def blit_current_level(self, screen):
         lvl = levels[self.current_level]
-        lvl.group.draw(screen)
-        self.set_ball_friction()
-        self.sprites.update(tick)
+
+        if cfg.DEBUG:
+            draw_options = DrawOptions(screen)
+            lvl.space.debug_draw(draw_options)
+        lvl.sprites.draw(screen)
         self.sprites.draw(screen)
+
+    def update_physics(self):
+        self.current_lvl.space.step(1 / (cfg.FPS))
+
+    def update_visuals(self):
+        self.sprites.update()
 
     def display_scores(self, screen):
         pass

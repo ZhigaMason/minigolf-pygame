@@ -9,8 +9,8 @@ class AbstractFloor(Cell, ABC):
 
     @property
     @abstractmethod
-    def friction(self) -> float:
-        """Returns friction coeficient for this type of floor"""
+    def opp_force(self) -> int:
+        """Returns opp_force coeficient for this type of floor"""
         pass
 
 class Grass(AbstractFloor):
@@ -18,21 +18,21 @@ class Grass(AbstractFloor):
         AbstractFloor.__init__(self, COLORS["GRASS_GREEN"], grid_pos)
 
     @property
-    def friction(self):
-        return 0.96
+    def opp_force(self):
+        return 100
 
 class Ice(AbstractFloor):
     def __init__(self, grid_pos):
         AbstractFloor.__init__(self, COLORS["ICE_BLUE"], grid_pos)
 
     @property
-    def friction(self):
-        return 0.99
+    def opp_force(self):
+        return 10
 
 class Sand(AbstractFloor):
     def __init__(self, grid_pos):
         AbstractFloor.__init__(self, COLORS["SAND_YELLOW"], grid_pos)
 
     @property
-    def friction(self):
-        return 0.9
+    def opp_force(self):
+        return 500

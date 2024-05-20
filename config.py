@@ -1,17 +1,23 @@
 import pygame
+
+DEBUG = 0
 pygame.font.init()
 
 FPS = 60
+DIV = 10
 
 SCREEN_SIZE = (1280, 960)
 CELL_SIZE = 32
 GRID_SIZE  = SCREEN_SIZE[0] // CELL_SIZE, SCREEN_SIZE[1] // CELL_SIZE 
 
 def make_grid_pos(pos):
-    return pos[0] // CELL_SIZE, pos[1] // CELL_SIZE
+    return int(pos[0] // CELL_SIZE), int(pos[1] // CELL_SIZE)
 
 def make_screen_pos(grid_pos):
     return grid_pos[0] * CELL_SIZE, grid_pos[1] * CELL_SIZE
+
+def make_screen_centered(grid_pos):
+    return grid_pos[0] * CELL_SIZE + CELL_SIZE // 2, grid_pos[1] * CELL_SIZE + CELL_SIZE // 2
 
 NUM_LEVELS = 12
 
@@ -36,6 +42,9 @@ COLORS = {
 
 BALL_SIZE = 16
 BALL_RAD = BALL_SIZE // 2
+BALL_MASS = 0.5
+BALL_INERTIA = 1
+BALL_ELASTICITY = 0.99999
 
 HOLE_SIZE = 24
 HOLE_RAD = HOLE_SIZE // 2
@@ -47,6 +56,6 @@ BALL_COLORS = [
     (200, 255, 200), 
 ]
 
-ARROW_BOX_SIZE = 240, 240
-ARROW_MAX_LENGTH = 100
+ARROW_MAX_LENGTH = 180
+ARROW_BOX_SIZE = 600, 600
 ARROW_BALL_GAP = 20

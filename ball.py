@@ -1,7 +1,9 @@
 import pygame
+import pymunk
+import config as cfg
 from config import BALL_SIZE, BALL_RAD, BALL_COLORS, make_grid_pos
 from math import dist
-from pygame import Vector2
+from levels import Level
 
 class Ball(pygame.sprite.Sprite):
 
@@ -11,28 +13,40 @@ class Ball(pygame.sprite.Sprite):
         self.rect = pygame.draw.circle(self.image, BALL_COLORS[player_num], (BALL_RAD, BALL_RAD), BALL_RAD)
         self.clr = BALL_COLORS[player_num]
         self.set_default()
+        self.body = pymunk.Body(cfg.BALL_MASS, cfg.BALL_INERTIA)
+        self.shape = pymunk.Circle(self.body, BALL_RAD )
+        self.shape.elasticity = cfg.BALL_ELASTICITY
+        self.pivot = None
 
     def set_default(self, pos = (0, 0), visible = True):
         self.visible = visible
         self.rect.center = pos
-        self.vel = Vector2(0, 0)
-        self.acc = Vector2(0, 0)
-        self.friction = 1.0
 
     def is_moving(self):
-        return self.vel.length_squared() >= 0.1
+        return self.body.get_length_sqrd() >= 0.01
 
     def is_inside(self, pos) -> bool:
         return dist(self.rect.center, pos) <= BALL_RAD
     
     def apply_force(self, force):
-        self.acc += force
+        self.body.apply_impulse_at_local_point(force, (0,0))
 
-    def move(self, t):
-        self.vel += self.acc * t
-        self.vel *= self.friction ** 2
-        self.acc *= self.friction
-        self.rect.center += self.vel * t
+    def update(self, *args, **kwargs):
+        self.rect.center = self.body.position
 
-    def update(self, t, *args, **kwargs):
-        self.move(t)
+    def add_to_level(self, level : Level):
+        space = level.space
+        pivot = pymunk.PivotJoint(space.static_body, self.body, (0,0), (0,0))
+        pivot.max_bias = 0
+        pivot.grid = level.grid
+        
+        def pre_solve_fn(c, _):
+            gx, gy = make_grid_pos(c.b.position)
+            c.max_force = c.grid[gx][gy]
+        
+        pivot.pre_solve = pre_solve_fn
+        self.pivot = pivot
+        space.add(self.body, self.shape, self.pivot)
+
+    def remove_from_level(self, space):
+        space.remove(self.body, self.shape, self.pivot)

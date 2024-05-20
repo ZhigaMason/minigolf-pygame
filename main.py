@@ -1,9 +1,9 @@
 import pygame
-import config
+import config as cfg
 from game_manager import GameManager, GameState
 
 pygame.init()
-screen = pygame.display.set_mode(config.SCREEN_SIZE)
+screen = pygame.display.set_mode(cfg.SCREEN_SIZE)
 clock = pygame.time.Clock()
 gmanager = GameManager()
 def quitend():
@@ -13,7 +13,7 @@ def quitend():
 
 if __name__ == '__main__':
     while gmanager.state == GameState.INITIAL_STATE:
-        screen.fill(config.COLORS["BLACK"])
+        screen.fill(cfg.COLORS["BLACK"])
         gmanager.blit_init(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     while True:
         gmanager.add_player_choosing_btns()
         while gmanager.state == GameState.CHOOSING_PLAYER:
-            screen.fill(config.COLORS["WARM_YELLOW"])
+            screen.fill(cfg.COLORS["WARM_YELLOW"])
             gmanager.blit_choose_player(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
         gmanager.add_mode_choosing_btns()
         while gmanager.state == GameState.CHOOSING_MODE:
-            screen.fill(config.COLORS["WARM_YELLOW"])
+            screen.fill(cfg.COLORS["WARM_YELLOW"])
             gmanager.blit_choose_mode(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -50,8 +50,10 @@ if __name__ == '__main__':
         draw_arrow = False
         gmanager.preplay_util()
         while gmanager.state == GameState.PLAYING:
-            dt = clock.tick(config.FPS) / 100
-            gmanager.blit_current_level(screen, tick=dt)
+            dt = clock.tick(cfg.FPS) / 100
+            gmanager.update_physics()
+            gmanager.update_visuals()
+            gmanager.blit_current_level(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quitend()
