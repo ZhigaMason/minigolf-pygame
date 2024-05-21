@@ -4,6 +4,7 @@ import config as cfg
 from config import BALL_SIZE, BALL_RAD, BALL_COLORS, make_grid_pos
 from math import dist
 from levels import Level
+from pymunk.vec2d import Vec2d as v2
 
 class Ball(pygame.sprite.Sprite):
 
@@ -12,6 +13,7 @@ class Ball(pygame.sprite.Sprite):
         self.image = pygame.Surface([BALL_SIZE, BALL_SIZE], pygame.SRCALPHA)
         self.rect = pygame.draw.circle(self.image, BALL_COLORS[player_num], (BALL_RAD, BALL_RAD), BALL_RAD)
         self.clr = BALL_COLORS[player_num]
+        self.num = player_num
         self.set_default()
         self.body = pymunk.Body(cfg.BALL_MASS, cfg.BALL_INERTIA)
         self.shape = pymunk.Circle(self.body, BALL_RAD )
@@ -21,6 +23,12 @@ class Ball(pygame.sprite.Sprite):
     def set_default(self, pos = (0, 0), visible = True):
         self.visible = visible
         self.rect.center = pos
+
+    def make_clear(self):
+        self.image.fill((0,0,0,0))
+
+    def draw_self(self):
+        pygame.draw.circle(self.image, self.clr, (BALL_RAD, BALL_RAD), BALL_RAD)
 
     def is_moving(self):
         return self.body.get_length_sqrd() >= 0.01
@@ -48,5 +56,7 @@ class Ball(pygame.sprite.Sprite):
         self.pivot = pivot
         space.add(self.body, self.shape, self.pivot)
 
-    def remove_from_level(self, space):
-        space.remove(self.body, self.shape, self.pivot)
+    def remove_from_level(self, level):
+        self.body.velocity = v2(0,0)
+        self.body.force = v2(0,0)
+        level.space.remove(self.body, self.shape, self.pivot)

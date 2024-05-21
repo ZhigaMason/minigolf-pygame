@@ -53,6 +53,7 @@ if __name__ == '__main__':
             dt = clock.tick(cfg.FPS) / 100
             gmanager.update_physics()
             gmanager.update_visuals()
+            gmanager.update_logic()
             gmanager.blit_current_level(screen)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

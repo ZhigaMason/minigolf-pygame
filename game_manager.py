@@ -21,7 +21,7 @@ class GameState(Enum):
 class PlayerQueue:
 
     def __init__(self, player_n):
-        self.len = player_n
+        self.ary = [ i for i in range(player_n)]
         self.cnt = -1 # for the no branching
 
     def __iter__(self):
@@ -30,9 +30,15 @@ class PlayerQueue:
     
     def __next__(self):
         self.cnt += 1
-        if self.cnt >= self.len:
+        if self.cnt >= len(self.ary):
             self.cnt = 0
-        return self.cnt
+        return self.ary[self.cnt]
+    
+    def remove(self, n):
+        idx = self.ary.index(n)
+        del self.ary[idx]
+        if self.cnt > idx:
+            self.cnt -= 1
 
 class GameManager:
 
@@ -110,6 +116,8 @@ class GameManager:
         self.set_ball_positions()
 
     def update_active_players(self):
+        for ball in self.balls:
+            ball.draw_self()
         self.plr_queue = PlayerQueue(self.players)
         self.current_player = next(self.plr_queue)
 
@@ -118,13 +126,13 @@ class GameManager:
         if self.current_level >= cfg.NUM_LEVELS:
             self.state = GameState.FINAL_STATE
             return
-        self.update_active_players()
         self.clean_level()
         self.set_ball_positions()
+        self.update_active_players()
 
     def clean_level(self):
-        for ball in self.balls:
-            ball.remove_from_level(self.current_lvl.space)
+        for n in self.plr_queue.ary:
+            self.balls[n].remove_from_level(self.current_lvl)
 
     def set_ball_positions(self):
         for idx, ball in enumerate(self.balls):
@@ -141,7 +149,8 @@ class GameManager:
     def leave_arrow(self):
         self.arrow.kill()
         force = self.arrow.force
-        self.balls[self.current_player].apply_force(force)
+        self.current_plr.apply_force(force)
+        self.throws[self.current_plr.num] += 1
         self.current_player = next(self.plr_queue)
  
     def blit_init(self, screen):
@@ -169,6 +178,19 @@ class GameManager:
 
     def update_visuals(self):
         self.sprites.update()
+
+    def update_logic(self):
+        hole = self.current_lvl.hole
+        for n in self.plr_queue.ary:
+            ball = self.balls[n]
+            if hole.is_inside(ball):
+                n = ball.num
+                ball.make_clear()
+                ball.remove_from_level(self.current_lvl)
+                self.plr_queue.remove(n)
+                print(f'ball #{n} has hit the hole on {self.throws[n]} strikes')
+        if len(self.plr_queue.ary) == 0:
+            self.next_level()
 
     def display_scores(self, screen):
         pass

@@ -24,6 +24,8 @@ class Level:
         self.balls = []
         self.add_borders()
         self.add_default_floor()
+        self.set_hole((10, 10))
+        self.set_initial_pos(*((20, i) for i in range(15, 19)))
 
     def add_borders(self):
         self.set_cells_by_type(Wall, ((0, i) for i in range(cfg.GRID_SIZE[1])))
@@ -35,6 +37,7 @@ class Level:
         self.set_cells_by_type(Grass, ((i, j) for i in range(1, cfg.GRID_SIZE[0] - 1) for j in range(1, cfg.GRID_SIZE[1] - 1)))
     
     def set_hole(self, grid_pos):
+        self.hole.remove(self.sprites)
         self.hole = Hole(grid_pos)
         self.hole.add(self.sprites)
         #could be needed to add hole to pymunk space as static body
