@@ -33,7 +33,6 @@ if __name__ == '__main__':
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     gmanager.player_choose()
             pygame.display.flip()
-        print(gmanager.players)
 
         gmanager.add_mode_choosing_btns()
         while gmanager.state == GameState.CHOOSING_MODE:
@@ -45,7 +44,6 @@ if __name__ == '__main__':
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     gmanager.mode_choose()
             pygame.display.flip()
-        print(gmanager.current_level)
 
         draw_arrow = False
         gmanager.preplay_util()
@@ -66,10 +64,22 @@ if __name__ == '__main__':
                     draw_arrow = False
             if gmanager.movement_stopped():
                 gmanager.next_plr()
-
             pygame.display.flip()
-            
 
-        quitend()
+        gmanager.add_score_board()
+        gmanager.add_final_buttons()
+        while gmanager.state == GameState.FINAL_STATE:
+            screen.fill(cfg.COLORS["GREEN"])
+            gmanager.blit_score_board(screen)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quitend()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    gmanager.restart_choose()
+            pygame.display.flip()
+        
+        if gmanager.state == GameState.EXIT:
+            break
+        gmanager.reset()
 
 quitend()

@@ -3,7 +3,7 @@ import pygame
 import config as cfg
 from levels import levels, Level
 from enum import Enum
-from game_objects import SelectButton, RisingLabel, TurnIndecator
+from game_objects import SelectButton, RisingLabel, TurnIndecator, ScoreBoard
 from ball import Ball
 from arrow import Arrow
 from pymunk.pygame_util import DrawOptions
@@ -15,6 +15,7 @@ class GameState(Enum):
     CHOOSING_MODE = 2
     PLAYING = 3
     FINAL_STATE = 4
+    EXIT = 5
 
     def __str__(self):
         return f"{self.name}"
@@ -48,8 +49,12 @@ class GameManager:
 
     def __init__(self):
         self.state = GameState.INITIAL_STATE
+        self.reset()
+
+    def reset(self):
         self.players = 1
         self.scores = [0 for _ in range(4)]
+        self.total_strikes = [0 for _ in range(4)]
         self.strikes = []
         self.current_level = 0
 
@@ -122,6 +127,22 @@ class GameManager:
     def remove_turn_id(self):
         self.turn_id.remove(self.sprites)
 
+    def add_score_board(self):
+        pl = self.players
+        sb = ScoreBoard(self.scores[:pl], self.total_strikes[:pl])
+        sb.add(self.sprites)
+
+    def add_final_buttons(self):
+        label = cfg.ternary_font.render('RESTART', False, cfg.COLORS['BLACK'])
+        btn = SelectButton(label, GameState.CHOOSING_PLAYER, *cfg.SCOREBOARD_BTN_SIZE, color = cfg.COLORS['SCOREBOARD_BG'])
+        btn.rect.topright = cfg.SCOREBOARD_BTN_RESTART_TR
+        btn.add(self.btns, self.sprites)
+
+        label = cfg.ternary_font.render('EXIT', False, cfg.COLORS['BLACK'])
+        btn = SelectButton(label, GameState.EXIT, *cfg.SCOREBOARD_BTN_SIZE, color = cfg.COLORS['SCOREBOARD_BG'])
+        btn.rect.topleft = cfg.SCOREBOARD_BTN_EXIT_TL
+        btn.add(self.btns, self.sprites)
+
     def player_choose(self):
         for btn in self.btns:
             if btn.is_clicked():
@@ -133,10 +154,18 @@ class GameManager:
                 return
 
     def mode_choose(self):
-        for btn in self.sprites:
+        for btn in self.btns:
             if btn.is_clicked():
                 self.current_level = btn.info
                 self.state = GameState.PLAYING
+                self.sprites.empty()
+                self.btns.empty()
+                return
+
+    def restart_choose(self):
+        for btn in self.btns:
+            if btn.is_clicked():
+                self.state = btn.info
                 self.sprites.empty()
                 self.btns.empty()
                 return
@@ -162,10 +191,11 @@ class GameManager:
             for i in self.plr_queue.ary:
                 self.strikes[i] += 1
  
-
     def next_level(self):
         self.was_moving = False
         self.current_level += 1
+        for i, strk in enumerate(self.strikes):
+            self.total_strikes[i] += strk
         self.strikes = [ 0 for _ in range(self.players)]
         if self.current_level >= cfg.NUM_LEVELS:
             self.state = GameState.FINAL_STATE
@@ -219,6 +249,16 @@ class GameManager:
         lvl.sprites.draw(screen)
         self.sprites.draw(screen)
 
+    def blit_score_board(self, screen):
+        lvl = levels[0]
+        lvl.sprites.draw(screen)
+        self.sprites.draw(screen)
+
+    def update_game(self, *args, **kwargs):
+        self.update_physics()
+        self.update_visuals(*args, **kwargs)
+        self.update_logic()
+
     def update_physics(self):
         self.current_lvl.space.step(1 / (cfg.FPS))
 
@@ -245,7 +285,3 @@ class GameManager:
         earned = 5 - board.index(strk)
         self.scores[n] += earned
         self.add_score_label(earned, self.balls[n].clr)
-
-    def display_scores(self, screen):
-        pass
-        raise NotImplementedError()
