@@ -32,12 +32,13 @@ class PlayerQueue:
         self.cnt += 1
         if self.cnt >= len(self.ary):
             self.cnt = 0
-        return self.ary[self.cnt]
+            return self.ary[self.cnt], True
+        return self.ary[self.cnt], False
     
     def remove(self, n):
         idx = self.ary.index(n)
         del self.ary[idx]
-        if self.cnt > idx:
+        if self.cnt >= idx:
             self.cnt -= 1
 
 class GameManager:
@@ -46,7 +47,7 @@ class GameManager:
         self.state = GameState.INITIAL_STATE
         self.players = 1
         self.scores = [0 for _ in range(4)]
-        self.throws = [0 for _ in range(4)]
+        self.throws = []
         self.current_level = 0
         self.sprites = pygame.sprite.Group()
         self.btns = pygame.sprite.Group()
@@ -54,6 +55,7 @@ class GameManager:
         self.plr_queue = PlayerQueue(1)
         self.current_player = 0
         self.arrow = None
+        self.was_moving = False
 
     @property
     def current_lvl(self) -> Level:
@@ -68,6 +70,12 @@ class GameManager:
 
     def pos_in_current_ball(self, pos) -> bool:
         return self.balls[self.current_player].is_inside(pos)
+
+    def movement_stopped(self):
+        if self.was_moving and not self.any_movement():
+            self.was_moving = False
+            return True
+        return False
 
     def add_player_choosing_btns(self):
         for i in range(1, 5):
@@ -94,6 +102,7 @@ class GameManager:
         for btn in self.btns:
             if btn.is_clicked():
                 self.players = btn.info
+                self.throws = [0 for _ in range(self.players)]
                 self.state = GameState.CHOOSING_MODE
                 self.sprites.empty()
                 self.btns.empty()
@@ -119,10 +128,13 @@ class GameManager:
         for ball in self.balls:
             ball.draw_self()
         self.plr_queue = PlayerQueue(self.players)
-        self.current_player = next(self.plr_queue)
+        self.current_player, _ = next(self.plr_queue)
+        print(self.current_player)
 
     def next_level(self):
+        self.was_moving = False
         self.current_level += 1
+        self.throws = [ 0 for _ in range(self.players)]
         if self.current_level >= cfg.NUM_LEVELS:
             self.state = GameState.FINAL_STATE
             return
@@ -145,13 +157,22 @@ class GameManager:
         ball = self.current_plr
         self.arrow = Arrow(ball.rect.center, ball.clr)
         self.arrow.add(self.sprites)
+        print(self.current_player)
 
     def leave_arrow(self):
         self.arrow.kill()
         force = self.arrow.force
         self.current_plr.apply_force(force)
-        self.throws[self.current_plr.num] += 1
-        self.current_player = next(self.plr_queue)
+        self.was_moving = True
+        print(self.current_player)
+
+    def next_plr(self):
+        print(f' before upd {self.current_player}')
+        self.current_player, cycled = next(self.plr_queue)
+        print(f' after upd  {self.current_player}')
+        if cycled:
+            for i in self.plr_queue.ary:
+                self.throws[i] += 1
  
     def blit_init(self, screen):
         start_text = cfg.primary_font.render("Minigolf Game", False, cfg.COLORS["WHITE"])
@@ -188,9 +209,19 @@ class GameManager:
                 ball.make_clear()
                 ball.remove_from_level(self.current_lvl)
                 self.plr_queue.remove(n)
+                self.count_score(n)
                 print(f'ball #{n} has hit the hole on {self.throws[n]} strikes')
         if len(self.plr_queue.ary) == 0:
+            print(self.scores)
             self.next_level()
+
+    def count_score(self, n):
+        strk = self.throws[n]
+        board = sorted(list(set(self.throws)))
+        print(self.throws, n, board)
+        earned = 5 - board.index(strk)
+        print(f'player #{n} earned {earned} pts')
+        self.scores[n] += earned
 
     def display_scores(self, screen):
         pass

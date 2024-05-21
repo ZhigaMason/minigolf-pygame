@@ -31,7 +31,7 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, self.clr, (BALL_RAD, BALL_RAD), BALL_RAD)
 
     def is_moving(self):
-        return self.body.get_length_sqrd() >= 0.01
+        return self.body.velocity.get_length_sqrd() >= 0.01
 
     def is_inside(self, pos) -> bool:
         return dist(self.rect.center, pos) <= BALL_RAD

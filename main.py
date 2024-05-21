@@ -58,12 +58,14 @@ if __name__ == '__main__':
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quitend()
-                if event.type == pygame.MOUSEBUTTONDOWN and gmanager.pos_in_current_ball(pygame.mouse.get_pos()):
+                if all((event.type == pygame.MOUSEBUTTONDOWN, gmanager.pos_in_current_ball(pygame.mouse.get_pos()), not gmanager.any_movement())):
                     gmanager.draw_arrow()
                     draw_arrow = True
                 if event.type == pygame.MOUSEBUTTONUP and draw_arrow:
                     gmanager.leave_arrow()
                     draw_arrow = False
+            if gmanager.movement_stopped():
+                gmanager.next_plr()
             pygame.display.flip()
             
 

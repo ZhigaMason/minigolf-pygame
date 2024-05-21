@@ -24,7 +24,7 @@ class Level:
         self.balls = []
         self.add_borders()
         self.add_default_floor()
-        self.set_hole((10, 10))
+        self.set_hole((10, 16))
         self.set_initial_pos(*((20, i) for i in range(15, 19)))
 
     def add_borders(self):
