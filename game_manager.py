@@ -3,10 +3,11 @@ import pygame
 import config as cfg
 from levels import levels, Level
 from enum import Enum
-from game_objects import SelectButton
+from game_objects import SelectButton, RisingText
 from ball import Ball
 from arrow import Arrow
 from pymunk.pygame_util import DrawOptions
+from pygame.math import Vector2
 
 class GameState(Enum):
     INITIAL_STATE = 0
@@ -29,6 +30,8 @@ class PlayerQueue:
             yield next(self)
     
     def __next__(self):
+        if not self.ary:
+            return 0, False
         self.cnt += 1
         if self.cnt >= len(self.ary):
             self.cnt = 0
@@ -51,6 +54,7 @@ class GameManager:
         self.current_level = 0
         self.sprites = pygame.sprite.Group()
         self.btns = pygame.sprite.Group()
+        self.decorators = pygame.sprite.Group()
         self.balls = []
         self.plr_queue = PlayerQueue(1)
         self.current_player = 0
@@ -97,6 +101,14 @@ class GameManager:
         btn.rect.center = (cfg.SCREEN_SIZE[0] // 2 + 40 + btn.rect.w // 2 , cfg.SCREEN_SIZE[1] // 2 - btn.rect.h // 2)
         btn.add(self.sprites)
         btn.add(self.btns)
+
+    def add_score_label(self, score, color):
+        label = cfg.ternary_font.render('+' + str(score), False, color)
+        txt = RisingText(label)
+        h = self.current_lvl.hole.rect.center
+        txt.rect.center = (h[0], h[1] - cfg.HOLE_SIZE) 
+        txt.add(self.sprites)
+        txt.add(self.decorators)
 
     def player_choose(self):
         for btn in self.btns:
@@ -197,8 +209,8 @@ class GameManager:
     def update_physics(self):
         self.current_lvl.space.step(1 / (cfg.FPS))
 
-    def update_visuals(self):
-        self.sprites.update()
+    def update_visuals(self, *args, **kwargs):
+        self.sprites.update(*args, **kwargs)
 
     def update_logic(self):
         hole = self.current_lvl.hole
@@ -211,17 +223,15 @@ class GameManager:
                 self.plr_queue.remove(n)
                 self.count_score(n)
                 print(f'ball #{n} has hit the hole on {self.throws[n]} strikes')
-        if len(self.plr_queue.ary) == 0:
-            print(self.scores)
+        if not self.decorators and not self.plr_queue.ary:
             self.next_level()
 
     def count_score(self, n):
         strk = self.throws[n]
         board = sorted(list(set(self.throws)))
-        print(self.throws, n, board)
         earned = 5 - board.index(strk)
-        print(f'player #{n} earned {earned} pts')
         self.scores[n] += earned
+        self.add_score_label(earned, self.balls[n].clr)
 
     def display_scores(self, screen):
         pass

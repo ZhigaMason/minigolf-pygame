@@ -51,10 +51,10 @@ if __name__ == '__main__':
         gmanager.preplay_util()
         while gmanager.state == GameState.PLAYING:
             dt = clock.tick(cfg.FPS) / 100
-            gmanager.update_physics()
-            gmanager.update_visuals()
-            gmanager.update_logic()
             gmanager.blit_current_level(screen)
+            gmanager.update_physics()
+            gmanager.update_visuals(dt)
+            gmanager.update_logic()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     quitend()
@@ -66,6 +66,7 @@ if __name__ == '__main__':
                     draw_arrow = False
             if gmanager.movement_stopped():
                 gmanager.next_plr()
+
             pygame.display.flip()
             
 

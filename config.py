@@ -23,6 +23,7 @@ NUM_LEVELS = 12
 
 primary_font = pygame.font.SysFont('Arial', 120)
 secondary_font = pygame.font.SysFont('Papyrus', 50)
+ternary_font = pygame.font.SysFont('Helvetica', 30)
 
 COLORS = { 
     "BLACK" : (0, 0, 0),
@@ -32,6 +33,7 @@ COLORS = {
     "BLUE" : (0, 0, 255),
     "CYAN" : (0, 200, 200),
     "WARM_YELLOW" : "#F4E98C",
+    "NULL" : (0, 0, 0, 0),
 
     "WALL_GREY" : (120, 120, 120),
     "WALL_BLUE" : (100, 100, 140),
