@@ -3,7 +3,7 @@ import pygame
 import config as cfg
 from levels import levels, Level
 from enum import Enum
-from game_objects import SelectButton, RisingText
+from game_objects import SelectButton, RisingLabel, TurnIndecator
 from ball import Ball
 from arrow import Arrow
 from pymunk.pygame_util import DrawOptions
@@ -50,16 +50,19 @@ class GameManager:
         self.state = GameState.INITIAL_STATE
         self.players = 1
         self.scores = [0 for _ in range(4)]
-        self.throws = []
+        self.strikes = []
         self.current_level = 0
+
         self.sprites = pygame.sprite.Group()
         self.btns = pygame.sprite.Group()
         self.decorators = pygame.sprite.Group()
+
         self.balls = []
         self.plr_queue = PlayerQueue(1)
         self.current_player = 0
         self.arrow = None
         self.was_moving = False
+        self.turn_id = None
 
     @property
     def current_lvl(self) -> Level:
@@ -104,17 +107,26 @@ class GameManager:
 
     def add_score_label(self, score, color):
         label = cfg.ternary_font.render('+' + str(score), False, color)
-        txt = RisingText(label)
+        txt = RisingLabel(label)
         h = self.current_lvl.hole.rect.center
         txt.rect.center = (h[0], h[1] - cfg.HOLE_SIZE) 
         txt.add(self.sprites)
         txt.add(self.decorators)
 
+    def add_turn_id(self):
+        pos = self.current_plr.rect.center
+        clr = self.current_plr.clr
+        self.turn_id = TurnIndecator(pos, clr)
+        self.turn_id.add(self.sprites)
+
+    def remove_turn_id(self):
+        self.turn_id.remove(self.sprites)
+
     def player_choose(self):
         for btn in self.btns:
             if btn.is_clicked():
                 self.players = btn.info
-                self.throws = [0 for _ in range(self.players)]
+                self.strikes = [0 for _ in range(self.players)]
                 self.state = GameState.CHOOSING_MODE
                 self.sprites.empty()
                 self.btns.empty()
@@ -133,20 +145,28 @@ class GameManager:
         self.balls = [Ball(x) for x in range(self.players)]
         for ball in self.balls:
             ball.add(self.sprites)
-        self.update_active_players()
         self.set_ball_positions()
+        self.update_active_players()
 
     def update_active_players(self):
         for ball in self.balls:
             ball.draw_self()
         self.plr_queue = PlayerQueue(self.players)
-        self.current_player, _ = next(self.plr_queue)
-        print(self.current_player)
+        self.next_plr()
+
+    def next_plr(self):
+        self.current_player, cycled = next(self.plr_queue)
+        if self.plr_queue.ary:
+            self.add_turn_id()
+        if cycled:
+            for i in self.plr_queue.ary:
+                self.strikes[i] += 1
+ 
 
     def next_level(self):
         self.was_moving = False
         self.current_level += 1
-        self.throws = [ 0 for _ in range(self.players)]
+        self.strikes = [ 0 for _ in range(self.players)]
         if self.current_level >= cfg.NUM_LEVELS:
             self.state = GameState.FINAL_STATE
             return
@@ -169,23 +189,16 @@ class GameManager:
         ball = self.current_plr
         self.arrow = Arrow(ball.rect.center, ball.clr)
         self.arrow.add(self.sprites)
-        print(self.current_player)
+        self.remove_turn_id()
 
     def leave_arrow(self):
-        self.arrow.kill()
         force = self.arrow.force
+        self.arrow.kill()
+        if force.get_length_sqrd() <= cfg.ARROW_MIN_LENGTH:
+            return
         self.current_plr.apply_force(force)
         self.was_moving = True
-        print(self.current_player)
 
-    def next_plr(self):
-        print(f' before upd {self.current_player}')
-        self.current_player, cycled = next(self.plr_queue)
-        print(f' after upd  {self.current_player}')
-        if cycled:
-            for i in self.plr_queue.ary:
-                self.throws[i] += 1
- 
     def blit_init(self, screen):
         start_text = cfg.primary_font.render("Minigolf Game", False, cfg.COLORS["WHITE"])
         rect = start_text.get_rect()
@@ -222,13 +235,13 @@ class GameManager:
                 ball.remove_from_level(self.current_lvl)
                 self.plr_queue.remove(n)
                 self.count_score(n)
-                print(f'ball #{n} has hit the hole on {self.throws[n]} strikes')
+                print(f'ball #{n} has hit the hole on {self.strikes[n]} strikes')
         if not self.decorators and not self.plr_queue.ary:
             self.next_level()
 
     def count_score(self, n):
-        strk = self.throws[n]
-        board = sorted(list(set(self.throws)))
+        strk = self.strikes[n]
+        board = sorted(list(set(self.strikes)))
         earned = 5 - board.index(strk)
         self.scores[n] += earned
         self.add_score_label(earned, self.balls[n].clr)
