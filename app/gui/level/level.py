@@ -55,5 +55,5 @@ class Level:
             self.grid[x][y] = cell.opp_force
 
     def set_initial_pos(self, pos1, pos2, pos3, pos4):
-        self.initial_pos = [cfg.make_screen_pos(p) for p in (pos1, pos2, pos3, pos4)]
+        self.initial_pos = [cfg.make_screen_centered(p) for p in (pos1, pos2, pos3, pos4)]
 
