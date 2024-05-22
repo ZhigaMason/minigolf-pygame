@@ -5,7 +5,7 @@ pygame.font.init()
 
 FPS = 60
 DIV = 10
-NUM_LEVELS = 1
+NUM_LEVELS = 12
 
 SCREEN_SIZE = (1280, 960)
 CELL_SIZE = 32

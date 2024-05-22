@@ -1,4 +1,4 @@
-from config import CELL_SIZE, make_screen_pos, make_screen_centered
+from util.config import CELL_SIZE, make_screen_centered
 import pymunk
 import pygame
 

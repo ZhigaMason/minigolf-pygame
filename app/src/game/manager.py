@@ -1,13 +1,15 @@
 import pymunk
 import pygame
-import config as cfg
-from levels import levels, Level
-from enum import Enum
-from game_objects import SelectButton, RisingLabel, TurnIndecator, ScoreBoard
-from ball import Ball
-from arrow import Arrow
+import util.config as cfg
 from pymunk.pygame_util import DrawOptions
+from enum import Enum
 from pygame.math import Vector2
+
+from src.game.objects import SelectButton, RisingLabel, TurnIndecator, ScoreBoard
+from src.game.arrow import Arrow
+from src.game.ball import Ball
+
+from gui.level.level import levels, Level
 
 class GameState(Enum):
     INITIAL_STATE = 0

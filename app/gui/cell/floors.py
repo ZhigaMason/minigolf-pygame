@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from config import COLORS
-from cell import Cell
+from util.config import COLORS
+from gui.cell.base_cell import Cell
 
 class AbstractFloor(Cell, ABC):
 

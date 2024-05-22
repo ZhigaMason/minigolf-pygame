@@ -1,6 +1,6 @@
 import pygame
-import config as cfg
-from game_manager import GameManager, GameState
+import util.config as cfg
+from src.game.manager import GameManager, GameState
 
 pygame.init()
 screen = pygame.display.set_mode(cfg.SCREEN_SIZE)

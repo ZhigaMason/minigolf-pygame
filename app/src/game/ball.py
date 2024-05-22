@@ -1,10 +1,11 @@
 import pygame
 import pymunk
-import config as cfg
-from config import BALL_SIZE, BALL_RAD, BALL_COLORS, make_grid_pos
+import util.config as cfg
 from math import dist
-from levels import Level
 from pymunk.vec2d import Vec2d as v2
+
+from util.config import BALL_SIZE, BALL_RAD, BALL_COLORS, make_grid_pos
+from gui.level.level import Level
 
 class Ball(pygame.sprite.Sprite):
 

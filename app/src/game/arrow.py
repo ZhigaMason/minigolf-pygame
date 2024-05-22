@@ -1,4 +1,4 @@
-import config as cfg
+import util.config as cfg
 import pygame
 from pymunk.vec2d import Vec2d as v2
 

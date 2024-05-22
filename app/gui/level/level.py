@@ -1,15 +1,13 @@
 import pygame
 import pymunk
-import config as cfg
-from config import GRID_SIZE, NUM_LEVELS, COLORS, make_grid_pos
+import util.config as cfg
 from enum import Enum
-from walls import Wall, SilentWall
-from floors import AbstractFloor, Grass, Ice, Sand
-from hole import Hole
 
-class CellType(Enum):
-    FLOOR = 0
-    WALL = 1
+from util.config import GRID_SIZE, NUM_LEVELS, COLORS, make_grid_pos
+
+from gui.cell.walls import Wall, SilentWall
+from gui.cell.floors import AbstractFloor, Grass, Ice, Sand
+from gui.level.hole import Hole
 
 class Level:
 

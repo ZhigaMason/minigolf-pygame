@@ -1,5 +1,5 @@
 import pygame
-import config as cfg
+import util.config as cfg
 from math import dist
 
 class Hole(pygame.sprite.Sprite):

@@ -1,10 +1,8 @@
 import pymunk
-import numpy as np
 from abc import ABC, abstractmethod
-from config import COLORS, make_screen_centered, CELL_SIZE
-from cell import Cell
+from util.config import COLORS, make_screen_centered, CELL_SIZE
+from gui.cell.base_cell import Cell
 from pygame import Vector2
-
 
 class AbstractWall(Cell, ABC):
 

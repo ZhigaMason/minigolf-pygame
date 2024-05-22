@@ -1,8 +1,6 @@
 import pygame
 import pygame.gfxdraw
-import config as cfg
-from math import pi
-from pygame.math import Vector2 as v2
+import util.config as cfg
 
 class TextSprite(pygame.sprite.Sprite):
     def __init__(self, label, w, h, bg_color):
