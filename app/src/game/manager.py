@@ -5,9 +5,13 @@ from pymunk.pygame_util import DrawOptions
 from enum import Enum
 from pygame.math import Vector2
 
-from src.game.objects import SelectButton, RisingLabel, TurnIndecator, ScoreBoard
-from src.game.arrow import Arrow
-from src.game.ball import Ball
+from src.objects.ball import *
+from src.objects.arrow import *
+from src.objects.scoreboard import *
+from src.objects.turn_indecator import *
+
+from src.objects.labels.select_button import *
+from src.objects.labels.rising_label import *
 
 from gui.level.level import levels, Level
 
@@ -277,7 +281,6 @@ class GameManager:
                 ball.remove_from_level(self.current_lvl)
                 self.plr_queue.remove(n)
                 self.count_score(n)
-                print(f'ball #{n} has hit the hole on {self.strikes[n]} strikes')
         if not self.decorators and not self.plr_queue.ary:
             self.next_level()
 

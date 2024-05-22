@@ -65,4 +65,3 @@ levels[0].set_cells_by_type(SilentWall, [ (i, 3) for i in range(1, GRID_SIZE[0] 
 levels[0].set_cells_by_type(Ice, [ (i, j) for i in range(4, 8) for j in range(10, 25)])
 levels[0].set_cells_by_type(Sand, [ (i, j) for i in range(10, 15) for j in range(18, 23)])
 levels[0].set_hole((15, 15))
-#print(levels[0].grid)

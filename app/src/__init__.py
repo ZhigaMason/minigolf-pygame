@@ -1,1 +1,1 @@
-__all__ = ['game']
+__all__ = ['game', 'objects', 'main_loop']
