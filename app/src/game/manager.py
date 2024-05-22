@@ -1,9 +1,7 @@
-import pymunk
 import pygame
 import util.config as cfg
 from pymunk.pygame_util import DrawOptions
 from enum import Enum
-from pygame.math import Vector2
 
 from src.objects.ball import *
 from src.objects.arrow import *
@@ -13,7 +11,8 @@ from src.objects.turn_indecator import *
 from src.objects.labels.select_button import *
 from src.objects.labels.rising_label import *
 
-from gui.level.level import levels, Level
+from gui.level.level import Level
+from src.levels_list import levels 
 
 class GameState(Enum):
     INITIAL_STATE = 0

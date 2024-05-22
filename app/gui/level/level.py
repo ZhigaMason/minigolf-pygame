@@ -1,13 +1,12 @@
 import pygame
 import pymunk
 import util.config as cfg
-from enum import Enum
 
-from util.config import GRID_SIZE, NUM_LEVELS, COLORS, make_grid_pos
+from util.config import GRID_SIZE
 
-from gui.cell.walls import Wall, SilentWall
-from gui.cell.floors import AbstractFloor, Grass, Ice, Sand
-from gui.level.hole import Hole
+from gui.cell.walls import Wall
+from gui.cell.floors import AbstractFloor, Grass
+from .hole import Hole
 
 class Level:
 
@@ -57,11 +56,4 @@ class Level:
 
     def set_initial_pos(self, pos1, pos2, pos3, pos4):
         self.initial_pos = [cfg.make_screen_pos(p) for p in (pos1, pos2, pos3, pos4)]
-#
 
-levels = [Level() for _ in range(NUM_LEVELS)]
-levels[0].set_initial_pos((10,10), (6,10), (7,10), (8,10))
-levels[0].set_cells_by_type(SilentWall, [ (i, 3) for i in range(1, GRID_SIZE[0] - 1)])
-levels[0].set_cells_by_type(Ice, [ (i, j) for i in range(4, 8) for j in range(10, 25)])
-levels[0].set_cells_by_type(Sand, [ (i, j) for i in range(10, 15) for j in range(18, 23)])
-levels[0].set_hole((15, 15))

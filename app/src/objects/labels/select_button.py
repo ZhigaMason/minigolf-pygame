@@ -1,6 +1,6 @@
 import pygame
 import util.config as cfg
-from src.objects.labels.label_sprite import LabelSprite
+from .label_sprite import LabelSprite
 
 class SelectButton(LabelSprite):
 
