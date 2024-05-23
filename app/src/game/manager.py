@@ -240,7 +240,8 @@ class GameManager:
     def leave_arrow(self):
         force = self.arrow.force
         self.arrow.kill()
-        if force.get_length_sqrd() <= cfg.ARROW_MIN_LENGTH:
+        if force.length <= cfg.ARROW_MIN_LENGTH:
+            self.add_turn_id()
             return
         self.plr.apply_force(force)
         self.was_moving = True

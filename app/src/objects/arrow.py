@@ -20,11 +20,12 @@ class Arrow(pygame.sprite.Sprite):
         dir = cent - mpos
         if dir.length >= cfg.ARROW_MAX_LENGTH:
             dir = dir.scale_to_length(cfg.ARROW_MAX_LENGTH)
-        if dir == v2(0,0):
+        if dir.length <= cfg.ARROW_MIN_LENGTH:
+            self.force = v2(0, 0)
             return
         self.force = dir
         tail = cfg.ARROW_BALL_GAP*(dir.scale_to_length(1)) + s
-        head = dir + tail
+        head = 1.1*dir + tail
         self.draw_arrow(tail, head, dir)
 
     def draw_arrow(self, tail, head, dir):
