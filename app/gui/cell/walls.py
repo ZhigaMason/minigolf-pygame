@@ -15,6 +15,10 @@ class AbstractWall(Cell, ABC):
         Cell.add_to_space(self, space)
         space.add(self.shape)
 
+    def remove_from_space(self, space):
+        Cell.remove_from_space(self, space)
+        space.remove(self.shape)
+
     @abstractmethod
     def elasticity(self) -> float:
         pass
@@ -33,4 +37,4 @@ class SilentWall(AbstractWall):
         AbstractWall.__init__(self, COLORS["WALL_BLUE"], grid_pos)
 
     def elasticity(self) -> float:
-        return 0.3
+        return 0.2

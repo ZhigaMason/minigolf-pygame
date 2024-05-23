@@ -14,6 +14,7 @@ class Level:
         self.sprites = pygame.sprite.Group()
         self.space = pymunk.Space(threaded=True)
         self.grid = [[0 for _ in range(GRID_SIZE[1])] for _ in range(GRID_SIZE[0])]
+        self.cell_grid = [[None for _ in range(GRID_SIZE[1])] for _ in range(GRID_SIZE[0])]
         self.space.threads = 2
         self.space.iterations = cfg.FPS * cfg.DIV
         self.initial_pos = init_pos
@@ -48,10 +49,13 @@ class Level:
             self.add_cell(cell_type, *pos)
 
     def add_cell(self, cell_type, x, y):
+        if self.cell_grid[x][y] is not None:
+            self.cell_grid[x][y].remove_from_space(self.space)
         cell = cell_type((x, y))
         cell.add(self.sprites)
         cell.add_to_space(self.space)
         self.grid[x][y] = cell.opp_force
+        self.cell_grid[x][y] = cell
 
 
     def set_initial_pos(self, pos1, pos2, pos3, pos4):
