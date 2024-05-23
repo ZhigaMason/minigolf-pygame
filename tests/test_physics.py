@@ -4,7 +4,9 @@ import app.util.config as cfg
 from pymunk import Vec2d
 from app.gui.level.level import Level
 from app.src.objects.ball import Ball
-from math import dist
+from app.gui.cell.floors import Grass, Sand, Ice
+from app.gui.cell.walls import SilentWall
+from math import dist, fabs
 
 DIST_EPS = 10
 SCR_W, SCR_H = cfg.SCREEN_SIZE
@@ -66,3 +68,59 @@ def test_ricochet(ball_pos : tuple[int, int], force : Vec2d, exp_pos : tuple[int
     ball.update()
     print(ball.rect.center)
     assert dist(ball.rect.center, exp_pos) <= DIST_EPS
+
+@pytest.mark.parametrize(
+    'ball_pos, force, exp_pos',
+    [
+        ((cfg.CELL_SIZE * 3, SCR_H // 2),        Vec2d(-80, 0),    ( 40, SCR_H // 2)),
+        ((cfg.CELL_SIZE * 5, SCR_H // 2),        Vec2d(-100, 100), ( 40, SCR_H // 2 + 120)),
+        ((cfg.CELL_SIZE * 5, SCR_H // 2),        Vec2d(-100, -100),( 40, SCR_H // 2 - 120)),
+        ((SCR_W - cfg.CELL_SIZE * 3, SCR_H // 2),Vec2d(80, 0),     ( SCR_W - 40, SCR_H // 2)),
+        ((SCR_W - cfg.CELL_SIZE * 5, SCR_H // 2),Vec2d(100, 100),  ( SCR_W - 40, SCR_H // 2 + 120)),
+        ((SCR_W - cfg.CELL_SIZE * 5, SCR_H // 2),Vec2d(100, -100), ( SCR_W - 40, SCR_H // 2 - 120)),
+        ((SCR_W // 2, cfg.CELL_SIZE * 3),        Vec2d(0, -80),    ( SCR_W // 2, 40)),
+        ((SCR_W // 2, cfg.CELL_SIZE * 5),        Vec2d(100, -100), ( SCR_W // 2 + 120, 40)),
+        ((SCR_W // 2, cfg.CELL_SIZE * 5),        Vec2d(-100, -100),( SCR_W // 2 - 120, 40)),
+        ((SCR_W // 2, SCR_H - cfg.CELL_SIZE * 3),Vec2d(0, 80),     ( SCR_W // 2, SCR_H - 40)),
+        ((SCR_W // 2, SCR_H - cfg.CELL_SIZE * 5),Vec2d(100, 100), ( SCR_W // 2 + 120, SCR_H - 40)),
+        ((SCR_W // 2, SCR_H - cfg.CELL_SIZE * 5),Vec2d(-100, 100),  ( SCR_W // 2 - 120, SCR_H - 40)),
+    ]
+)
+def test_silent_ricochet(ball_pos : tuple[int, int], force : Vec2d, exp_pos : tuple[int, int]):
+    ball = Ball(0)
+    lvl = Level()
+    lvl.set_cells_by_type(SilentWall, ((i, 0) for i in range(GRD_W)) )
+    lvl.set_cells_by_type(SilentWall, ((i, GRD_H - 1) for i in range(GRD_W)) )
+    lvl.set_cells_by_type(SilentWall, ((0, i) for i in range(GRD_H)) )
+    lvl.set_cells_by_type(SilentWall, ((GRD_W - 1, i) for i in range(GRD_H)) )
+    ball.body.position = ball_pos
+    ball.add_to_level(lvl)
+
+    ball.apply_force(force)
+    for _ in range(int(force.length)):
+        lvl.space.step(force.length / 1000)
+    ball.update()
+    print(ball.rect.center)
+    assert dist(ball.rect.center, exp_pos) <= DIST_EPS
+
+@pytest.mark.parametrize(
+    'floor, length',
+    [
+        (Grass, 240),
+        (Ice, 920),
+        (Sand, 60),
+    ]
+)
+def test_floor(floor, length):
+    ball = Ball(0)
+    lvl = Level()
+    lvl.set_cells_by_type(floor, [(i,j) for i in range(4, 30) for j in range(4, 7)])
+    ball.body.position = cfg.make_screen_centered((5,5))
+    ball.add_to_level(lvl)
+
+    ball.apply_force(Vec2d(150, 0))
+    for _ in range(100):
+        lvl.space.step(0.1)
+    ball.update()
+    assert fabs(dist(cfg.make_screen_centered((5,5)), ball.rect.center) - length) <= DIST_EPS
+
