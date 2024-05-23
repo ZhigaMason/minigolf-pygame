@@ -39,12 +39,12 @@ def test_hole(plr_n : int):
     man.preplay_util()
 
     for _ in range(cfg.NUM_LEVELS):
-        hole_pos = man.current_lvl.hole.rect.center
-        lvl_n = man.current_level
+        hole_pos = man.lvl.hole.rect.center
+        lvl_n = man.current_level_number
         for i in range(plr_n):
             man.balls[i].body.position = hole_pos
         for _ in range(10):
             man.update_game(10)
-        assert lvl_n + 1 == man.current_level
+        assert lvl_n + 1 == man.current_level_number
     assert man.scores == [60 for _ in range(plr_n)]
 

@@ -57,7 +57,7 @@ def man_choosing_level(man_choosing_plr):
 )
 def test_set_start_level(man_choosing_level : GameManager, starting_lvl : int):
     man_choosing_level.set_start_level(starting_lvl)
-    assert man_choosing_level.current_level == starting_lvl
+    assert man_choosing_level.current_level_number == starting_lvl
     assert not man_choosing_level.btns
     assert not man_choosing_level.sprites
     assert man_choosing_level.state == GameState.PLAYING
@@ -79,7 +79,7 @@ def man_preplay_util(man_finish_choose):
 
 def test_level_progression(man_preplay_util):
     man = man_preplay_util
-    starting_lvl = man.current_level
+    starting_lvl = man.current_level_number
     for _ in range(starting_lvl, cfg.NUM_LEVELS):
         assert man.state == GameState.PLAYING
         man.next_level()

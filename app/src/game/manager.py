@@ -62,7 +62,7 @@ class GameManager:
         self.scores = []
         self.total_strikes = []
         self.strikes = []
-        self.current_level = 0
+        self.current_level_number = 0
 
         self.sprites = pygame.sprite.Group()
         self.btns = pygame.sprite.Group()
@@ -70,24 +70,24 @@ class GameManager:
 
         self.balls = []
         self.plr_queue = PlayerQueue(1)
-        self.current_player = 0
+        self.current_player_number = 0
         self.arrow = None
         self.was_moving = False
         self.turn_id = None
 
     @property
-    def current_lvl(self) -> Level:
-        return levels[self.current_level]
+    def lvl(self) -> Level:
+        return levels[self.current_level_number]
 
     @property
-    def current_plr(self) -> Ball:
-        return self.balls[self.current_player]
+    def plr(self) -> Ball:
+        return self.balls[self.current_player_number]
 
     def any_movement(self) -> bool:
         return any((b.is_moving() for b in self.balls))
 
     def pos_in_current_ball(self, pos) -> bool:
-        return self.balls[self.current_player].is_inside(pos)
+        return self.balls[self.current_player_number].is_inside(pos)
 
     def movement_stopped(self):
         if self.was_moving and not self.any_movement():
@@ -119,14 +119,14 @@ class GameManager:
     def add_score_label(self, score, color):
         label = cfg.ternary_font.render('+' + str(score), False, color)
         txt = RisingLabel(label)
-        h = self.current_lvl.hole.rect.center
+        h = self.lvl.hole.rect.center
         txt.rect.center = (h[0], h[1] - cfg.HOLE_SIZE) 
         txt.add(self.sprites)
         txt.add(self.decorators)
 
     def add_turn_id(self):
-        pos = self.current_plr.rect.center
-        clr = self.current_plr.clr
+        pos = self.plr.rect.center
+        clr = self.plr.clr
         self.turn_id = TurnIndecator(pos, clr)
         self.turn_id.add(self.sprites)
 
@@ -171,7 +171,7 @@ class GameManager:
                 return
 
     def set_start_level(self, n):
-        self.current_level = n
+        self.current_level_number = n
         self.state = GameState.PLAYING
         self.sprites.empty()
         self.btns.empty()
@@ -201,7 +201,7 @@ class GameManager:
         self.next_plr()
 
     def next_plr(self):
-        self.current_player, cycled = next(self.plr_queue)
+        self.current_player_number, cycled = next(self.plr_queue)
         if self.plr_queue.ary:
             self.add_turn_id()
         if cycled:
@@ -211,10 +211,10 @@ class GameManager:
     def next_level(self):
         self.was_moving = False
         self.clean_level()
-        self.current_level += 1
+        self.current_level_number += 1
         self.total_strikes += self.strikes
         self.strikes = np.ones((self.players,), dtype=int)
-        if self.current_level >= cfg.NUM_LEVELS:
+        if self.current_level_number >= cfg.NUM_LEVELS:
             self.state = GameState.FINAL_STATE
             return
         self.set_ball_positions()
@@ -222,17 +222,17 @@ class GameManager:
 
     def clean_level(self):
         for n in self.plr_queue.ary:
-            self.balls[n].remove_from_level(self.current_lvl)
+            self.balls[n].remove_from_level(self.lvl)
 
     def set_ball_positions(self):
         for idx, ball in enumerate(self.balls):
-            ball.body.position = self.current_lvl.initial_pos[idx]
+            ball.body.position = self.lvl.initial_pos[idx]
             ball.visible = True
-            ball.add_to_level(self.current_lvl)
+            ball.add_to_level(self.lvl)
             ball.update()
 
     def draw_arrow(self):
-        ball = self.current_plr
+        ball = self.plr
         self.arrow = Arrow(ball.rect.center, ball.clr)
         self.arrow.add(self.sprites)
         self.remove_turn_id()
@@ -242,7 +242,7 @@ class GameManager:
         self.arrow.kill()
         if force.get_length_sqrd() <= cfg.ARROW_MIN_LENGTH:
             return
-        self.current_plr.apply_force(force)
+        self.plr.apply_force(force)
         self.was_moving = True
 
     def blit_init(self, screen):
@@ -257,7 +257,7 @@ class GameManager:
         self.sprites.draw(screen)
 
     def blit_current_level(self, screen):
-        lvl = levels[self.current_level]
+        lvl = levels[self.current_level_number]
 
         if cfg.DEBUG:
             draw_options = DrawOptions(screen)
@@ -278,19 +278,19 @@ class GameManager:
         self.update_logic()
 
     def update_physics(self):
-        self.current_lvl.space.step(1 / (cfg.FPS))
+        self.lvl.space.step(1 / (cfg.FPS))
 
     def update_visuals(self, *args, **kwargs):
         self.sprites.update(*args, **kwargs)
 
     def update_logic(self):
-        hole = self.current_lvl.hole
+        hole = self.lvl.hole
         for n in self.plr_queue.ary:
             ball = self.balls[n]
             if hole.is_inside(ball):
                 n = ball.num
                 ball.make_clear()
-                ball.remove_from_level(self.current_lvl)
+                ball.remove_from_level(self.lvl)
                 self.plr_queue.remove(n)
                 self.count_score(n)
         if not self.decorators and not self.plr_queue.ary:
