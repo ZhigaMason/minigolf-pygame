@@ -8,7 +8,7 @@ from app.gui.cell.walls import Wall, SilentWall
 from random import randint
 
 def rand_pos():
-    return randint(0, cfg.GRID_SIZE[0]), randint(0, cfg.GRID_SIZE[1])
+    return randint(0, cfg.GRID_SIZE[0] - 1), randint(0, cfg.GRID_SIZE[1] - 1)
 LVL_TEST_GRID = Level()
 @pytest.mark.parametrize(
     'cell, exp',
