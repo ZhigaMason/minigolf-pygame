@@ -1,17 +1,15 @@
-from abc import ABC, abstractmethod
 from util.config import COLORS
 from .base_cell import Cell
 
-class AbstractFloor(Cell, ABC):
+class AbstractFloor(Cell):
 
     def __init__(self, color, grid_pos):
         Cell.__init__(self, color, grid_pos)
 
     @property
-    @abstractmethod
     def opp_force(self) -> int:
         """Returns opp_force coeficient for this type of floor"""
-        pass
+        raise NotImplementedError('Calling opp_force on generic floor')
 
 class Grass(AbstractFloor):
     def __init__(self, grid_pos):

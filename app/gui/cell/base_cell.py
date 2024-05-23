@@ -19,3 +19,7 @@ class Cell(pygame.sprite.Sprite):
 
     def add_to_space(self, space):
         space.add(self.body)
+
+    @property
+    def opp_force(self) -> int:
+        return 0
