@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 import util.config as cfg
 from pymunk.pygame_util import DrawOptions
 from enum import Enum
@@ -59,7 +60,7 @@ class GameManager:
     def reset(self):
         self.players = 1
         self.scores = [0 for _ in range(4)]
-        self.total_strikes = [0 for _ in range(4)]
+        self.total_strikes = []
         self.strikes = []
         self.current_level = 0
 
@@ -156,7 +157,8 @@ class GameManager:
 
     def set_player_number(self, n):
         self.players = n
-        self.strikes = [0 for _ in range(self.players)]
+        self.strikes = np.ones((n,), dtype=int)
+        self.total_strikes = np.zeros((n,), dtype=int)
         self.state = GameState.CHOOSING_MODE
         self.sprites.empty()
         self.btns.empty()
@@ -209,9 +211,8 @@ class GameManager:
         self.was_moving = False
         self.clean_level()
         self.current_level += 1
-        for i, strk in enumerate(self.strikes):
-            self.total_strikes[i] += strk
-        self.strikes = [ 0 for _ in range(self.players)]
+        self.total_strikes += self.strikes
+        self.strikes = np.ones((self.players,), dtype=int)
         if self.current_level >= cfg.NUM_LEVELS:
             self.state = GameState.FINAL_STATE
             return
