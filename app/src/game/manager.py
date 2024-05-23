@@ -59,7 +59,7 @@ class GameManager:
 
     def reset(self):
         self.players = 1
-        self.scores = [0 for _ in range(4)]
+        self.scores = []
         self.total_strikes = []
         self.strikes = []
         self.current_level = 0
@@ -157,6 +157,7 @@ class GameManager:
 
     def set_player_number(self, n):
         self.players = n
+        self.scores = [ 0 for _ in range(n)]
         self.strikes = np.ones((n,), dtype=int)
         self.total_strikes = np.zeros((n,), dtype=int)
         self.state = GameState.CHOOSING_MODE
@@ -270,6 +271,8 @@ class GameManager:
         self.sprites.draw(screen)
 
     def update_game(self, *args, **kwargs):
+        if self.state != GameState.PLAYING:
+            return
         self.update_physics()
         self.update_visuals(*args, **kwargs)
         self.update_logic()
