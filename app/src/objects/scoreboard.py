@@ -23,7 +23,7 @@ class ScoreBoard(pygame.sprite.Sprite):
         title = cfg.scoreboard_font1.render('SCOREBOARD', False, cfg.COLORS['BLACK'])
         title_rect = title.get_rect()
         twh, thh = title_rect.center
-        title_rect.topleft = (ScoreBoard.W // 2 - twh, (ScoreBoard.H + thh) // 5)
+        title_rect.topleft = (ScoreBoard.W // 2 - twh, (ScoreBoard.H) // 8)
         self.image.blit(title, title_rect)
 
         subr, subs = ScoreBoard.wide_surface(40)
@@ -61,7 +61,7 @@ class ScoreBoard(pygame.sprite.Sprite):
     
     @staticmethod
     def accent_rect():
-        return pygame.Rect(ScoreBoard.H // 8, 0, 3 * ScoreBoard.H // 4, 50 )
+        return pygame.Rect(cfg.SCOREBOARD_ACCENT_RECT_POS, cfg.SCOREBOARD_ACCENT_RECT_SIZE)
 
     @staticmethod
     def wide_surface(height = 50) ->  tuple[pygame.Rect, pygame.Surface]:

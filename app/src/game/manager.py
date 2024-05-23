@@ -98,21 +98,21 @@ class GameManager:
     def add_player_choosing_btns(self):
         for i in range(1, 5):
             text = cfg.secondary_font.render(str(i), False, cfg.COLORS["GREEN"])
-            btn = SelectButton(text, i)
+            btn = SelectButton(text, i, *cfg.PLAYER_CHOOSING_BTNS_SIZE)
             # count place
-            btn.rect.center = (i * 300, cfg.SCREEN_SIZE[1] // 2 - btn.rect.h // 2)
+            btn.rect.center = cfg.PLAYER_CHOOSING_BTNS_POS[i - 1]
             btn.add(self.sprites)
             btn.add(self.btns)
 
-    def add_mode_choosing_btns(self):
+    def add_start_level_choosing_btns(self):
         text = cfg.secondary_font.render('1-12', False, cfg.COLORS["BLUE"])
-        btn = SelectButton(text, 0, 240, 360)
-        btn.rect.center = (cfg.SCREEN_SIZE[0] // 2 - 40 - btn.rect.w // 2 , cfg.SCREEN_SIZE[1] // 2 - btn.rect.h // 2)
+        btn = SelectButton(text, 0, *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
+        btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[0]
         btn.add(self.sprites)
         btn.add(self.btns)
         text = cfg.secondary_font.render('7-12', False, cfg.COLORS["BLUE"])
-        btn = SelectButton(text, 6, 240, 360)
-        btn.rect.center = (cfg.SCREEN_SIZE[0] // 2 + 40 + btn.rect.w // 2 , cfg.SCREEN_SIZE[1] // 2 - btn.rect.h // 2)
+        btn = SelectButton(text, 0, *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
+        btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[1]
         btn.add(self.sprites)
         btn.add(self.btns)
 

@@ -35,7 +35,7 @@ def start():
                     gmanager.player_choose()
             pygame.display.flip()
 
-        gmanager.add_mode_choosing_btns()
+        gmanager.add_start_level_choosing_btns()
         while gmanager.state == GameState.CHOOSING_MODE:
             screen.fill(cfg.COLORS["WARM_YELLOW"])
             gmanager.blit_choose_mode(screen)
