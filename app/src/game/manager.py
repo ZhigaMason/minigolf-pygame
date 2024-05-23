@@ -151,29 +151,38 @@ class GameManager:
     def player_choose(self):
         for btn in self.btns:
             if btn.is_clicked():
-                self.players = btn.info
-                self.strikes = [0 for _ in range(self.players)]
-                self.state = GameState.CHOOSING_MODE
-                self.sprites.empty()
-                self.btns.empty()
+                self.set_player_number(btn.info)
                 return
+
+    def set_player_number(self, n):
+        self.players = n
+        self.strikes = [0 for _ in range(self.players)]
+        self.state = GameState.CHOOSING_MODE
+        self.sprites.empty()
+        self.btns.empty()
 
     def mode_choose(self):
         for btn in self.btns:
             if btn.is_clicked():
-                self.current_level = btn.info
-                self.state = GameState.PLAYING
-                self.sprites.empty()
-                self.btns.empty()
+                self.set_start_level(btn.info)
                 return
+
+    def set_start_level(self, n):
+        self.current_level = n
+        self.state = GameState.PLAYING
+        self.sprites.empty()
+        self.btns.empty()
 
     def restart_choose(self):
         for btn in self.btns:
             if btn.is_clicked():
-                self.state = btn.info
-                self.sprites.empty()
-                self.btns.empty()
+                self.set_restart(btn.info)
                 return
+
+    def set_restart(self, state):
+        self.state = state
+        self.sprites.empty()
+        self.btns.empty()
 
     def preplay_util(self):
         self.balls = [Ball(x) for x in range(self.players)]
@@ -198,6 +207,7 @@ class GameManager:
  
     def next_level(self):
         self.was_moving = False
+        self.clean_level()
         self.current_level += 1
         for i, strk in enumerate(self.strikes):
             self.total_strikes[i] += strk
@@ -205,7 +215,6 @@ class GameManager:
         if self.current_level >= cfg.NUM_LEVELS:
             self.state = GameState.FINAL_STATE
             return
-        self.clean_level()
         self.set_ball_positions()
         self.update_active_players()
 
