@@ -33,4 +33,4 @@ class SilentWall(AbstractWall):
         AbstractWall.__init__(self, COLORS["WALL_BLUE"], grid_pos)
 
     def elasticity(self) -> float:
-        return 0.1
+        return 0.3
