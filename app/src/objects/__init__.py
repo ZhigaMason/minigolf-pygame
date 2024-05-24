@@ -1,3 +1,2 @@
+""" Dynamic game objects """
 __all__ = ['arrow', 'ball', 'labels', 'scoreboard']
-
-from .ball import Ball

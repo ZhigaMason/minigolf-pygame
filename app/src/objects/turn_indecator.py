@@ -1,8 +1,10 @@
+""" Turn indecator is used for indecating when and who can hit the ball"""
 import pygame
 import pygame.gfxdraw
 import util.config as cfg
 
 class TurnIndecator(pygame.sprite.Sprite):
+    """ Sprite-class implementing turn indecator """
 
     def __init__(self, pos, color):
         pygame.sprite.Sprite.__init__(self)
@@ -15,6 +17,7 @@ class TurnIndecator(pygame.sprite.Sprite):
         self.draw_self()
 
     def draw_self(self):
+        """ Method to redraw self used in update"""
         self.image.fill(cfg.COLORS['NULL'])
         r = cfg.TURN_ID_RAD
         c = cfg.TURN_ID_CENTER
@@ -26,5 +29,6 @@ class TurnIndecator(pygame.sprite.Sprite):
                 pygame.gfxdraw.arc(self.image, *c, r - w, a, b, self.clr)
 
     def update(self, dt, *args, **kwargs):
+        """ update is used to redraw turn indecator creating spinning illusion"""
         self.ang_offset += cfg.TURN_ID_SPEED*dt
         self.draw_self()

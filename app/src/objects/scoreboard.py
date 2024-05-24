@@ -1,8 +1,10 @@
+""" Scoreboard is shown at the end of a game containing scores and strikes of different players"""
 import pygame
 import util.config as cfg
 
 
 class ScoreBoard(pygame.sprite.Sprite):
+    """ Sprite class implemening scoreboard"""
     W, H = cfg.SCOREBOARD_SIZE
 
     def __init__(self, scores, total_strikes):
@@ -12,17 +14,18 @@ class ScoreBoard(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = cfg.SCOREBOARD_POS
         self.place_ptr = (0, 0)
-        self.print_title()
+        self.print_titles()
 
         srt = ScoreBoard.make_sorted_idx(scores)
         for i in srt:
             self.print_player(cfg.BALL_COLORS[i], scores[i], total_strikes[i])
 
 
-    def print_title(self):
+    def print_titles(self):
+        """ Prints 'SCOREBOARD' title and 'SCORE STRIKES' subtitle onto scoreboard """
         title = cfg.scoreboard_font1.render('SCOREBOARD', False, cfg.COLORS['BLACK'])
         title_rect = title.get_rect()
-        twh, thh = title_rect.center
+        twh = title_rect.center[0]
         title_rect.topleft = (ScoreBoard.W // 2 - twh, (ScoreBoard.H) // 8)
         self.image.blit(title, title_rect)
 
@@ -38,6 +41,7 @@ class ScoreBoard(pygame.sprite.Sprite):
         self.place_ptr = subr.bottomleft
 
     def print_player(self, color, score, strikes):
+        """ Prints players colored ball, score and strikes onto scoreboard """
         rect, surf = self.wide_surface()
         pygame.draw.rect(surf, cfg.COLORS['SCOREBOARD_BLACK'], ScoreBoard.accent_rect())
         vcent = rect.center[1]
@@ -55,16 +59,18 @@ class ScoreBoard(pygame.sprite.Sprite):
 
     @staticmethod
     def make_sorted_idx(scores : list[int]) -> list[int]:
+        """ Returns sorting permutaion from given scores """
         score_idx = [* enumerate(scores)]
         score_idx = sorted(score_idx, key = lambda tpl: tpl[1], reverse = True)
         return [idx for idx, _ in score_idx]
-    
+
     @staticmethod
     def accent_rect():
+        """ Returns rectangle that can be used to give accent to an area on scoreboard """
         return pygame.Rect(cfg.SCOREBOARD_ACCENT_RECT_POS, cfg.SCOREBOARD_ACCENT_RECT_SIZE)
 
     @staticmethod
     def wide_surface(height = 50) ->  tuple[pygame.Rect, pygame.Surface]:
+        """ Helper function for getting 'line' surface for scoreboard """
         surf = pygame.Surface([ScoreBoard.W, height], pygame.SRCALPHA)
         return surf.get_rect(), surf
-

@@ -1,1 +1,2 @@
-__all__ = ['manager', 'objects']
+""" The brain of game """
+__all__ = ['manager']

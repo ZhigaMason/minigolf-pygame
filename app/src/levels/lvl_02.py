@@ -1,3 +1,4 @@
+""" Implementing 3rd level """
 from util.config import GRID_SIZE, DEBUG
 from src.levels_list import levels
 

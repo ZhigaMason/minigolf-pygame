@@ -1,3 +1,4 @@
+""" This module has the list of all levels """
 from util.config import NUM_LEVELS
 from gui.level.level import Level
 

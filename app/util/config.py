@@ -1,3 +1,4 @@
+""" Configuration file """
 import pygame
 
 DEBUG = 0
@@ -9,15 +10,18 @@ NUM_LEVELS = 12
 
 SCREEN_SIZE = (1280, 960)
 CELL_SIZE = 32
-GRID_SIZE  = SCREEN_SIZE[0] // CELL_SIZE, SCREEN_SIZE[1] // CELL_SIZE 
+GRID_SIZE  = SCREEN_SIZE[0] // CELL_SIZE, SCREEN_SIZE[1] // CELL_SIZE
 
 def make_grid_pos(pos):
+    """ Makes grid position from screen position """
     return int(pos[0] // CELL_SIZE), int(pos[1] // CELL_SIZE)
 
 def make_screen_pos(grid_pos):
+    """ Makes screen position from grid position """
     return grid_pos[0] * CELL_SIZE, grid_pos[1] * CELL_SIZE
 
 def make_screen_centered(grid_pos):
+    """ Makes screen position from grid position and centers it """
     return grid_pos[0] * CELL_SIZE + CELL_SIZE // 2, grid_pos[1] * CELL_SIZE + CELL_SIZE // 2
 
 primary_font = pygame.font.SysFont('Arial', 120)
@@ -28,7 +32,7 @@ scoreboard_font1 = pygame.font.SysFont('Helvetica', 50)
 scoreboard_font2 = pygame.font.SysFont('Helvetica italian', 35)
 scoreboard_font3 = pygame.font.SysFont('ComicSans', 30)
 
-COLORS = { 
+COLORS = {
     "BLACK" : (0, 0, 0),
     "WHITE" : (255, 255, 255),
     "RED" : (255, 0, 0),
@@ -56,9 +60,9 @@ BALL_INERTIA = 1
 BALL_ELASTICITY = 0.99999
 
 BALL_COLORS = [
-    (255, 255, 255), 
-    (255, 200, 200), 
-    (200, 200, 255), 
+    (255, 255, 255),
+    (255, 200, 200),
+    (200, 200, 255),
     (200, 255, 200),
 ]
 

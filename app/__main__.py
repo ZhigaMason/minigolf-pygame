@@ -1,3 +1,6 @@
+""" 
+    Fancy wraper to start main_loop
+"""
 import src.main_loop
 
 if __name__ == '__main__':
