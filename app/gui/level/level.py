@@ -40,10 +40,12 @@ class Level:
         """ Adds default grass floor onto level """
         self.set_cells_by_type(Grass, ((i, j) for i in range(1, cfg.GRID_SIZE[0] - 1) for j in range(1, cfg.GRID_SIZE[1] - 1)))
 
-    def set_hole(self, grid_pos):
+    def set_hole(self, pos, grid : bool = True):
         """ Sets a hole in the level, and remove one if there was previously """
         self.hole.remove(self.sprites)
-        self.hole = Hole(grid_pos)
+        self.hole = Hole(pos)
+        if not grid:
+            self.hole.rect.center = pos
         self.hole.add(self.sprites)
 
     def set_cells_by_coord(self, coords):
