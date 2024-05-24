@@ -139,7 +139,7 @@ class GameManager:
         btn.add(self.sprites)
         btn.add(self.btns)
         text = cfg.secondary_font.render('7-12', False, cfg.COLORS["BLUE"])
-        btn = SelectButton(text, 0, *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
+        btn = SelectButton(text, 6, *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
         btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[1]
         btn.add(self.sprites)
         btn.add(self.btns)
