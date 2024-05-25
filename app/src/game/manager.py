@@ -295,9 +295,13 @@ class GameManager:
 
     def blit_init(self, screen):
         """ Paints initial screen """
-        start_text = cfg.primary_font.render("Minigolf Game", False, cfg.COLORS["WHITE"])
-        rect = start_text.get_rect()
-        screen.blit(start_text, (cfg.SCREEN_SIZE[0] // 2 - rect.center[0],cfg.SCREEN_SIZE[1] // 2 - rect.center[1]))
+        init_display = cfg.initial_bg
+        screen.blit(init_display, (0, 0))
+        ctc = cfg.secondary_font.render('click to continue', False, cfg.COLORS['BLACK'])
+        txt_rect = ctc.get_rect()
+        txt_rect.center = cfg.SCREEN_SIZE[0] // 2, 7 * cfg.SCREEN_SIZE[1] // 8
+        screen.blit(ctc, txt_rect)
+
 
     def blit_choose_player(self, screen):
         """ Paints choosing player number screen """

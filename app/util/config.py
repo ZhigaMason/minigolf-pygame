@@ -24,6 +24,8 @@ def make_screen_centered(grid_pos):
     """ Makes screen position from grid position and centers it """
     return grid_pos[0] * CELL_SIZE + CELL_SIZE // 2, grid_pos[1] * CELL_SIZE + CELL_SIZE // 2
 
+initial_bg = pygame.image.load(__file__[:-len('util/config.py')]+'assets/initial_bg.jpg')
+
 primary_font = pygame.font.SysFont('Arial', 120)
 secondary_font = pygame.font.SysFont('Papyrus', 50)
 ternary_font = pygame.font.SysFont('Helvetica', 30)
