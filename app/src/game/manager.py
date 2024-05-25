@@ -20,7 +20,7 @@ class GameState(Enum):
     """ Enum used to identify game states """
     INITIAL_STATE = 0
     CHOOSING_PLAYER = 1
-    CHOOSING_MODE = 2
+    CHOOSING_LEVEL = 2
     PLAYING = 3
     FINAL_STATE = 4
     EXIT = 5
@@ -81,19 +81,12 @@ class GameManager:
 
     def reset(self):
         """ Resets game manager and game with it. Should be called at the end or at the begging"""
-        self.players = 1
-        self.scores = []
-        self.total_strikes = []
-        self.strikes = []
         self.current_level_number = 0
 
         self.sprites = pygame.sprite.Group()
         self.btns = pygame.sprite.Group()
         self.decorators = pygame.sprite.Group()
 
-        self.balls = []
-        self.plr_queue = PlayerQueue(1)
-        self.current_player_number = 0
         self.arrow = None
         self.was_moving = False
         self.turn_id = None
@@ -183,7 +176,7 @@ class GameManager:
     def add_final_buttons(self):
         """ Adds EXIT and RESTART buttons """
         label = cfg.ternary_font.render('RESTART', False, cfg.COLORS['BLACK'])
-        btn = SelectButton(label, GameState.CHOOSING_PLAYER, *cfg.SCOREBOARD_BTN_SIZE, color = cfg.COLORS['SCOREBOARD_BG'])
+        btn = SelectButton(label, GameState.CHOOSING_LEVEL, *cfg.SCOREBOARD_BTN_SIZE, color = cfg.COLORS['SCOREBOARD_BG'])
         btn.rect.topright = cfg.SCOREBOARD_BTN_RESTART_TR
         btn.add(self.btns, self.sprites)
 
@@ -205,7 +198,7 @@ class GameManager:
         self.scores = [ 0 for _ in range(n)]
         self.strikes = np.ones((n,), dtype=int)
         self.total_strikes = np.zeros((n,), dtype=int)
-        self.state = GameState.CHOOSING_MODE
+        self.state = GameState.CHOOSING_LEVEL
         self.sprites.empty()
         self.btns.empty()
 

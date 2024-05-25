@@ -39,7 +39,7 @@ def subloop_player_num_choosing(screen, _, gmanager):
 
 def subloop_start_level_choosing(screen, _, gmanager):
     """ Subloop choosing number of start level """
-    while gmanager.state == GameState.CHOOSING_MODE:
+    while gmanager.state == GameState.CHOOSING_LEVEL:
         gmanager.blit_choose_mode(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -89,12 +89,10 @@ def start():
     gmanager = GameManager()
 
     subloop_initial(screen, clock, gmanager)
-
+    gmanager.add_player_choosing_btns()
+    subloop_player_num_choosing(screen, clock, gmanager)
 
     while True:
-        gmanager.add_player_choosing_btns()
-        subloop_player_num_choosing(screen, clock, gmanager)
-
         gmanager.add_start_level_choosing_btns()
         subloop_start_level_choosing(screen, clock, gmanager)
 
