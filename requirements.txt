@@ -1,0 +1,16 @@
+astroid==3.2.2
+cffi==1.16.0
+dill==0.3.8
+iniconfig==2.0.0
+isort==5.13.2
+mccabe==0.7.0
+numpy==1.26.4
+packaging==24.0
+platformdirs==4.2.2
+pluggy==1.5.0
+pycparser==2.22
+pygame==2.5.2
+pylint==3.2.2
+pymunk==6.8.0
+pytest==8.2.1
+tomlkit==0.12.5
