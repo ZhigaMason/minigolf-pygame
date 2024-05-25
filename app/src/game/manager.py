@@ -337,8 +337,6 @@ class GameManager:
 
     def blit_score_board(self, screen):
         """ Paints scoreboard onto screen """
-        lvl = levels[0]
-        lvl.sprites.draw(screen)
         self.sprites.draw(screen)
 
     def update_game(self, *args, **kwargs):
