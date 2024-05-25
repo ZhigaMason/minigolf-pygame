@@ -8,6 +8,8 @@ class SelectButton(LabelSprite):
 
     def __init__(self, label, info, w = 240, h = 360, color = cfg.COLORS['WHITE']):
         LabelSprite.__init__(self, label, w, h, color)
+        r = pygame.Rect(cfg.SELECT_BTN_FRAME_GAP,cfg.SELECT_BTN_FRAME_GAP,w - 2*cfg.SELECT_BTN_FRAME_GAP, h- 2*cfg.SELECT_BTN_FRAME_GAP)
+        pygame.draw.rect(self.image, cfg.COLORS['BLACK'], r, width = 4)
         self.info = info
 
     def inrect(self, x, y) -> bool:

@@ -131,7 +131,7 @@ class GameManager:
         btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[0]
         btn.add(self.sprites)
         btn.add(self.btns)
-        text = cfg.secondary_font.render('7-12 GOLFMEISTER', False, cfg.COLORS["DARK_RED"])
+        text = cfg.secondary_font.render('7-12 GOLFMASTER', False, cfg.COLORS["DARK_RED"])
         btn = SelectButton(text, (7, 12), *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
         btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[1]
         btn.add(self.sprites)
@@ -175,7 +175,7 @@ class GameManager:
 
     def add_final_buttons(self):
         """ Adds EXIT and RESTART buttons """
-        label = cfg.ternary_font.render('RESTART', False, cfg.COLORS['BLACK'])
+        label = cfg.ternary_font.render('CONTINUE', False, cfg.COLORS['BLACK'])
         btn = SelectButton(label, GameState.CHOOSING_LEVEL, *cfg.SCOREBOARD_BTN_SIZE, color = cfg.COLORS['SCOREBOARD_BG'])
         btn.rect.topright = cfg.SCOREBOARD_BTN_RESTART_TR
         btn.add(self.btns, self.sprites)
