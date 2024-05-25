@@ -126,7 +126,7 @@ class GameManager:
 
     def add_start_level_choosing_btns(self):
         """ Adds selection buttons for choosing start level """
-        text = cfg.secondary_font.render('1-6 TUTORIALS', False, cfg.COLORS["BLUE"])
+        text = cfg.secondary_font.render('1-6 TUTORIALS', False, cfg.COLORS["DARK_BLUE"])
         btn = SelectButton(text, (0, 6), *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
         btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[0]
         btn.add(self.sprites)
@@ -140,7 +140,7 @@ class GameManager:
         for i in range(2):
             for j in range(6):
                 n = 6*i + j
-                text = cfg.secondary_font.render(str(n), False, cfg.COLORS["BLUE"] if i == 0 else cfg.COLORS["DARK_RED"])
+                text = cfg.secondary_font.render(str(n + 1), False, cfg.COLORS["DARK_BLUE"] if i == 0 else cfg.COLORS["DARK_RED"])
                 btn = SelectButton(text, (n, n + 1), *cfg.SINGLE_LEVEL_CHOOSING_BTNS_SIZE)
                 pos = cfg.SINGLE_LEVEL_CHOOSING_BTNS_POS
                 btn.rect.center = pos[0] + j*cfg.SINGLE_LEVEL_CHOOSING_BTNS_SPACE, pos[1] + i*cfg.SINGLE_LEVEL_CHOOSING_BTNS_SPACE

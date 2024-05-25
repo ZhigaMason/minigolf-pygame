@@ -45,6 +45,7 @@ COLORS = {
     "WARM_YELLOW" : "#F4E98C",
     "DARK_GREEN" : (79, 135, 31),
     "DARK_RED" : (100, 28, 20),
+    "DARK_BLUE" : (20, 46, 100),
     "NULL" : (0, 0, 0, 0),
 
     "WALL_GREY" : (120, 120, 120),
