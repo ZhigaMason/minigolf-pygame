@@ -44,7 +44,7 @@ def test_set_players(man_choosing_plr : GameManager, plr_n):
     assert man_choosing_plr.players == plr_n
     assert not man_choosing_plr.btns
     assert not man_choosing_plr.sprites
-    assert man_choosing_plr.state == GameState.CHOOSING_MODE
+    assert man_choosing_plr.state == GameState.CHOOSING_LEVEL
 
 @pytest.fixture
 def man_choosing_level(man_choosing_plr):
@@ -94,7 +94,7 @@ def man_played(man_preplay_util):
 
 @pytest.mark.parametrize(
     'end_state',
-    [GameState.EXIT, GameState.CHOOSING_PLAYER]
+    [GameState.EXIT, GameState.CHOOSING_LEVEL]
 )
 def test_set_restart(man_played, end_state):
     man = man_played
