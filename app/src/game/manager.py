@@ -125,7 +125,7 @@ class GameManager:
     def add_player_choosing_btns(self):
         """ Adds selection buttons for choosing number of players """
         for i in range(1, 5):
-            text = cfg.secondary_font.render(str(i), False, cfg.COLORS["GREEN"])
+            text = cfg.secondary_font.render(str(i), False, cfg.COLORS["BLACK"])
             btn = SelectButton(text, i, *cfg.PLAYER_CHOOSING_BTNS_SIZE)
             btn.rect.center = cfg.PLAYER_CHOOSING_BTNS_POS[i - 1]
             btn.add(self.sprites)
@@ -133,16 +133,26 @@ class GameManager:
 
     def add_start_level_choosing_btns(self):
         """ Adds selection buttons for choosing start level """
-        text = cfg.secondary_font.render('1-12', False, cfg.COLORS["BLUE"])
-        btn = SelectButton(text, 0, *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
+        text = cfg.secondary_font.render('1-6 TUTORIALS', False, cfg.COLORS["BLUE"])
+        btn = SelectButton(text, (0, 6), *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
         btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[0]
         btn.add(self.sprites)
         btn.add(self.btns)
-        text = cfg.secondary_font.render('7-12', False, cfg.COLORS["BLUE"])
-        btn = SelectButton(text, 6, *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
+        text = cfg.secondary_font.render('7-12 GOLFMEISTER', False, cfg.COLORS["DARK_RED"])
+        btn = SelectButton(text, (7, 12), *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
         btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[1]
         btn.add(self.sprites)
         btn.add(self.btns)
+
+        for i in range(2):
+            for j in range(6):
+                n = 6*i + j
+                text = cfg.secondary_font.render(str(n), False, cfg.COLORS["BLUE"] if i == 0 else cfg.COLORS["DARK_RED"])
+                btn = SelectButton(text, (n, n + 1), *cfg.SINGLE_LEVEL_CHOOSING_BTNS_SIZE)
+                pos = cfg.SINGLE_LEVEL_CHOOSING_BTNS_POS
+                btn.rect.center = pos[0] + j*cfg.SINGLE_LEVEL_CHOOSING_BTNS_SPACE, pos[1] + i*cfg.SINGLE_LEVEL_CHOOSING_BTNS_SPACE
+                btn.add(self.sprites)
+                btn.add(self.btns)
 
     def add_score_label(self, score, color):
         """ Adds rising score on the hole """
@@ -203,12 +213,13 @@ class GameManager:
         """ Function checking if start level was chosen """
         for btn in self.btns:
             if btn.is_clicked():
-                self.set_start_level(btn.info)
+                self.set_start_level(*btn.info)
                 return
 
-    def set_start_level(self, n):
+    def set_start_level(self, start_lvl, end_lvl):
         """ Sets start level """
-        self.current_level_number = n
+        self.current_level_number = start_lvl
+        cfg.NUM_LEVELS = end_lvl
         self.state = GameState.PLAYING
         self.sprites.empty()
         self.btns.empty()
