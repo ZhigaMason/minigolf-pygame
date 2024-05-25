@@ -294,7 +294,7 @@ class GameManager:
         if force.length <= cfg.ARROW_MIN_LENGTH:
             self.add_turn_id()
             return
-        self.plr.apply_force(force)
+        self.plr.apply_force(cfg.ARROW_MULTIPLIER * force)
         self.was_moving = True
 
     def blit_init(self, screen):
