@@ -18,7 +18,7 @@ from app.src.objects.ball import Ball
 def test_strike_pts_correleation(plr_n :int, strike_list, exp_pts :list[int]):
     man = GameManager()
     man.set_player_number(plr_n)
-    man.set_start_level(0)
+    man.set_start_level(0, 12)
     man.preplay_util()
 
     for strikes in strike_list:
@@ -35,7 +35,7 @@ def test_strike_pts_correleation(plr_n :int, strike_list, exp_pts :list[int]):
 def test_hole(plr_n : int):
     man = GameManager()
     man.set_player_number(plr_n)
-    man.set_start_level(0)
+    man.set_start_level(0, 12)
     man.preplay_util()
 
     for _ in range(cfg.NUM_LEVELS):

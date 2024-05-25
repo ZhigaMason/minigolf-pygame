@@ -20,7 +20,7 @@ def test_setup_cycle(plr_n : int, starting_lvl : int, end_state : GameState ):
     man : GameManager = GameManager()
     man.state = GameState.CHOOSING_PLAYER
     test_set_players(man, plr_n)
-    test_set_start_level(man, starting_lvl)
+    test_set_start_level(man, (starting_lvl))
     test_preplay_util(man)
     test_level_progression(man)
     test_set_restart(man, end_state)
@@ -56,7 +56,7 @@ def man_choosing_level(man_choosing_plr):
     [lvl for lvl in range(cfg.NUM_LEVELS)]
 )
 def test_set_start_level(man_choosing_level : GameManager, starting_lvl : int):
-    man_choosing_level.set_start_level(starting_lvl)
+    man_choosing_level.set_start_level(starting_lvl, 12)
     assert man_choosing_level.current_level_number == starting_lvl
     assert not man_choosing_level.btns
     assert not man_choosing_level.sprites
@@ -64,7 +64,7 @@ def test_set_start_level(man_choosing_level : GameManager, starting_lvl : int):
 
 @pytest.fixture
 def man_finish_choose(man_choosing_level):
-    man_choosing_level.set_start_level(10)
+    man_choosing_level.set_start_level(10, 12)
     return man_choosing_level
 
 def test_preplay_util(man_finish_choose):
