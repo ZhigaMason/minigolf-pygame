@@ -4,4 +4,4 @@ from gui.level.level import Level
 
 levels = [Level() for _ in range(MAX_LEVELS)]
 
-from .levels import *
+from src.levels import *

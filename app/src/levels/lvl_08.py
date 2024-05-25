@@ -5,7 +5,7 @@ from src.levels_list import levels
 
 
 lvl = levels[8]
-with open(__file__[:-2] + 'txt','r') as f:
+with open(__file__[:-2] + 'txt','r', encoding='utf-8') as f:
     generate_level(f, lvl)
 
 lvl.set_initial_pos((29, 4), (29, 25), (31,7), (31, 22))

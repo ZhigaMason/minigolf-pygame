@@ -3,8 +3,8 @@ from util.config import DEBUG
 from util.level_config import GRD_W, GRD_H
 from src.levels_list import levels
 
-from gui.cell.walls import Wall, SilentWall
-from gui.cell.floors import Grass, Ice, Sand
+from gui.cell.walls import SilentWall
+from gui.cell.floors import Grass
 
 lvl = levels[2]
 

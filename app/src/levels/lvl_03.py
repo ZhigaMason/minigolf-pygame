@@ -1,15 +1,15 @@
 """ Implementing 4th level """
-from util.config import GRID_SIZE, DEBUG
+from util.config import DEBUG
+from util.level_config import GRD_W, GRD_H
 from src.levels_list import levels
-from util.level_config import print_quote, GRD_W, GRD_H
 
-from gui.cell.walls import Wall, SilentWall
-from gui.cell.floors import Grass, Ice, Sand
+from gui.cell.walls import Wall
+from gui.cell.floors import Sand
 
 lvl = levels[3]
 
 lvl.set_cells_by_type(Wall, ((i,j) for i in range(GRD_W // 2 - 9, GRD_W // 2 + 9) for j in range(GRD_H // 2 - 4, GRD_H // 2 + 4)))
-lvl.set_cells_by_type(Sand, ((i,j) for i in range(GRD_W // 2 - 8, GRD_W // 2 + 8) for j in range(GRD_H // 2 + 4, GRD_H - 1)))
+lvl.set_cells_by_type(Sand, ((i,j) for i in range(GRD_W // 2 - 7, GRD_W // 2 + 7) for j in range(GRD_H // 2 + 4, GRD_H - 1)))
 
 lvl.set_cells_by_coord({
     (1,1) : Wall,

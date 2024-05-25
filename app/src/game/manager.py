@@ -6,13 +6,14 @@ from pymunk.pygame_util import DrawOptions
 
 import util.config as cfg
 
+from src.levels_list import levels
+from src.levels import *
 from src.objects.ball import Ball
 from src.objects.arrow import Arrow
 from src.objects.scoreboard import ScoreBoard
 from src.objects.turn_indecator import TurnIndecator
 from src.objects.labels.select_button import SelectButton
 from src.objects.labels.rising_label import RisingLabel
-from src.levels_list import levels
 
 from gui.level.level import Level
 
@@ -102,6 +103,7 @@ class GameManager:
         return self.balls[self.current_player_number]
 
     def pos_in_current_ball(self, pos):
+        """ Checks if position is inside current player's ball """
         return self.plr.is_inside(pos)
 
     def any_movement(self) -> bool:
@@ -132,7 +134,7 @@ class GameManager:
         btn.add(self.sprites)
         btn.add(self.btns)
         text = cfg.secondary_font.render('7-12 GOLFMASTER', False, cfg.COLORS["DARK_RED"])
-        btn = SelectButton(text, (7, 12), *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
+        btn = SelectButton(text, (6, 12), *cfg.START_LEVEL_CHOOSING_BTNS_SIZE)
         btn.rect.center = cfg.START_LEVEL_CHOOSING_BTNS_POS[1]
         btn.add(self.sprites)
         btn.add(self.btns)
