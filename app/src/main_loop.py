@@ -18,7 +18,6 @@ def quitend():
 def subloop_initial(screen, _, gmanager):
     """ Subloop initializing game """
     while gmanager.state == GameState.INITIAL_STATE:
-        screen.fill(cfg.COLORS["BLACK"])
         gmanager.blit_init(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -30,7 +29,6 @@ def subloop_initial(screen, _, gmanager):
 def subloop_player_num_choosing(screen, _, gmanager):
     """ Subloop choosing number of playes """
     while gmanager.state == GameState.CHOOSING_PLAYER:
-        screen.fill(cfg.COLORS["WARM_YELLOW"])
         gmanager.blit_choose_player(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -42,7 +40,6 @@ def subloop_player_num_choosing(screen, _, gmanager):
 def subloop_start_level_choosing(screen, _, gmanager):
     """ Subloop choosing number of start level """
     while gmanager.state == GameState.CHOOSING_MODE:
-        screen.fill(cfg.COLORS["WARM_YELLOW"])
         gmanager.blit_choose_mode(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -76,7 +73,6 @@ def subloop_playing(screen, clock, gmanager):
 def subloop_final(screen, _, gmanager):
     """ Final subloop: either leaving or restarting """
     while gmanager.state == GameState.FINAL_STATE:
-        screen.fill(cfg.COLORS["GREEN"])
         gmanager.blit_score_board(screen)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

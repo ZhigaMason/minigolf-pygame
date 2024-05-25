@@ -305,10 +305,20 @@ class GameManager:
 
     def blit_choose_player(self, screen):
         """ Paints choosing player number screen """
+        screen.fill(cfg.COLORS['DARK_GREEN'])
+        txt = cfg.secondary_font.render('CHOOSE NUMBER OF PLAYERS', False, cfg.COLORS['WHITE'])
+        txt_rect = txt.get_rect()
+        txt_rect.center = cfg.SCREEN_SIZE[0] // 2, cfg.SCREEN_SIZE[1] // 8
+        screen.blit(txt, txt_rect)
         self.sprites.draw(screen)
 
     def blit_choose_mode(self, screen):
         """ Paints starting level screen """
+        screen.fill(cfg.COLORS['DARK_GREEN'])
+        txt = cfg.secondary_font.render('CHOOSE EPISODE OR LEVEL', False, cfg.COLORS['WHITE'])
+        txt_rect = txt.get_rect()
+        txt_rect.center = cfg.SCREEN_SIZE[0] // 2, cfg.SCREEN_SIZE[1] // 8
+        screen.blit(txt, txt_rect)
         self.sprites.draw(screen)
 
     def blit_current_level(self, screen):

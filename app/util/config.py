@@ -42,6 +42,7 @@ COLORS = {
     "BLUE" : (0, 0, 255),
     "CYAN" : (0, 200, 200),
     "WARM_YELLOW" : "#F4E98C",
+    "DARK_GREEN" : (79, 135, 31),
     "NULL" : (0, 0, 0, 0),
 
     "WALL_GREY" : (120, 120, 120),
